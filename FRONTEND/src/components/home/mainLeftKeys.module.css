@@ -1,0 +1,16 @@
+.main{
+    width: 18%;
+    height: 100%;
+    background-color:white;
+}
+@media only screen and (max-width: 600px) {
+    .main{
+        height: 87vh;
+        display: none;
+    }
+}
+
+@media only screen and (min-width: 600px) {
+}
+
+@media only screen and (min-width: 768px) {}

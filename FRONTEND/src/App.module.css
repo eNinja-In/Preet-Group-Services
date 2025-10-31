@@ -1,0 +1,22 @@
+.main {
+    width: 100vw;
+    height: 78vh;
+    display: flex;
+    background-color: aquamarine;
+}
+
+.home {
+    width: 64%;
+    height: 100%;
+    background-color: rgb(209, 209, 209);
+    display: flex;
+    justify-content: center;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+@media only screen and (max-width: 600px) {}
+
+@media only screen and (min-width: 600px) {}
+
+@media only screen and (min-width: 768px) {}

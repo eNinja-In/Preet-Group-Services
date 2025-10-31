@@ -1,0 +1,96 @@
+.main {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    top: 0;
+    background-color: black;
+    opacity: 0.8;
+    /* padding: 1%; */
+    /* border-radius: 20px; */
+}
+
+.login {
+    width: 50%;
+    height: 50%;
+    background-color: white;
+    opacity: 100;
+    border-radius: 20px;
+    border: 10px solid green;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.loginHead {
+    width: 100%;
+    /* background-color: aqua; */
+    text-align: center;
+    font-size: 125%;
+    padding: 0;
+    margin: 0;
+}
+
+.loginError {
+    width: 100%;
+    /* background-color: aquamarine; */
+    color: red;
+    text-align: center;
+    font-size: 80%;
+    padding: 0;
+    margin: 0;
+}
+
+.loginForm {
+    width: 45%;
+    /* background-color: aqua; */
+    /* display: flex; */
+    /* align-items: center; */
+}
+
+.inputSection {
+    width: 98%;
+    /* background-color: blue; */
+    margin: 3% 1%;
+}
+
+.input {
+    width: 100%;
+    /* background-color: aquamarine; */
+}
+
+.input input {
+    width: 96%;
+    /* background-color: bisque; */
+    padding: 2%;
+    font-size: 100%;
+    border: 2px solid black;
+    border-radius: 10px;
+}
+
+.submit {
+    width: 100%;
+    /* background-color: aqua; */
+}
+
+.submitBtn {
+    width: 100%;
+    text-align: center;
+}
+
+.submitBtn button {
+    width: 40%;
+    font-size: 110%;
+    padding: 2% 0%;
+    border-radius: 10px;
+    border: 2px solid black;
+    /* border-width: 10px; */
+    cursor: pointer;
+
+    &:hover {
+        scale: 0.95;
+    }
+}

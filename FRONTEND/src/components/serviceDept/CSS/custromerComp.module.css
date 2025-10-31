@@ -1,0 +1,141 @@
+.main {
+    width: 100%;
+}
+
+.compForm {
+    width: 100%;
+}
+
+.form {
+    width: 90%;
+    padding: 5%;
+
+}
+
+.autoInfoInput {
+    width: 100%;
+    display: flex;
+}
+
+.inputSection {
+    width: 40%;
+}
+
+.inputSection input {
+    width: 90%;
+    padding: 1.5%;
+    font-size: 105%;
+    outline: none;
+}
+
+.fetchData {
+    width: 15%;
+    display: flex;
+}
+
+.fetchBtn {
+    width: 98%;
+}
+
+.regBtn,
+.fetchBtn {
+    font-size: 120%;
+    border-radius: 10px;
+    border-width: 3px;
+    font-weight: bold;
+    text-align: center;
+    background-color: #0766AD;
+    color: white;
+    border-width: 2px;
+
+    &:hover {
+        background-color: white;
+        color: black;
+        cursor: pointer;
+    }
+
+}
+
+.regBtn {
+    width: 25%;
+    padding: 1%;
+}
+
+
+.warrenty {
+    width: 35%;
+    padding: 0 5%;
+    display: flex;
+    align-items: center;
+}
+
+.warrentyCheck {
+    width: 100%;
+    font-size: 150%;
+}
+
+.warrentyTrue,
+.warrentyFalse {
+    width: 100%;
+}
+
+.dataForm {
+    width: 96%;
+    margin: 5% 0;
+    padding: 2% 0;
+}
+
+.complaintForm {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.complaintForm>.inputSection {
+    width: 50%;
+    padding: 1% 0;
+}
+
+.complaintForm>.inputSection>input {
+    width: 90%;
+    padding: 2%;
+
+}
+
+.textSection {
+    width: 100%;
+
+}
+
+.textSection textarea {
+    min-width: 95%;
+    max-width: 95%;
+    padding: 1%;
+    font-size: 130%;
+    outline: none;
+}
+
+
+
+.locaionForm {
+    width: 50%;
+    padding: 0;
+    display: flex;
+    align-items: center;
+}
+
+.locaionForm>.inputSection {
+    height: auto;
+    display: flex;
+}
+
+
+
+
+.regData {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    /* align-items: center; */
+    padding: 3% 0;
+}
