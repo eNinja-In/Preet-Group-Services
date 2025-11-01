@@ -1,6 +1,8 @@
 import style from "./CSS/custromerComp.module.css"
 import { useState } from "react";
 import { fetchData } from "../helper/dataFecth";
+import PopUp from "../common/PopUp";
+
 export default function CompReg() {
     const [EngineNo, setEngineNo] = useState("");
     const [WarrentyChech, setWarrentyChech] = useState(true);
@@ -27,6 +29,7 @@ export default function CompReg() {
     return (
         <>
             <div className={style.main}>
+                <PopUp />
                 <div className={style.compForm}>
                     <div className={style.form}>
                         {/* Data Fetch Form */}
@@ -38,7 +41,7 @@ export default function CompReg() {
                                         value={EngineNo}
                                         placeholder="Engine No."
                                         onChange={(e) => setEngineNo(e.target.value)}
-                                        onClick={() => {}}
+                                        onClick={() => { }}
                                         required
                                     />
                                 </div>
@@ -52,9 +55,7 @@ export default function CompReg() {
                                         {Fetch ? "FETCHING..." : "FETCH"}
                                     </button>
                                 </div>
-                                {/* <div className={style.engineNoError}>
-                                    <DataFetch EngineNo={EngineNo} setData={handleDataFetchComplete} />
-                                </div> */}
+
                                 <div className={style.warrenty}>
                                     <div className={style.warrentyCheck}>
                                         {WarrentyChech ? (
@@ -75,7 +76,7 @@ export default function CompReg() {
                         <form className={style.dataForm}>
                             <div className={style.complaintForm}>
                                 {/* Data fields populated with `data` state */}
-                                <div className={style.inputSection} style={{ marginRight: '20%' }}>
+                                <div className={style.inputSection} style={{ marginRight: '1%' }}>
                                     <input
                                         type="text"
                                         value={data.Chassis}
@@ -102,7 +103,7 @@ export default function CompReg() {
                                     />
                                 </div>
                                 <div className={style.locaionForm}>
-                                    <div className={style.inputSection} style={{ width: '62%' }}>
+                                    <div className={style.inputSection} style={{ width: '60%' }}>
                                         <input
                                             type="text"
                                             value={data.Location}
@@ -110,7 +111,7 @@ export default function CompReg() {
                                             onChange={(e) => setData((prev) => ({ ...prev, Location: e.target.value }))}
                                         />
                                     </div>
-                                    <div className={style.inputSection} style={{ width: '33%' }}>
+                                    <div className={style.inputSection} style={{ width: '30%' }}>
                                         <input
                                             type="text"
                                             value={data.State}

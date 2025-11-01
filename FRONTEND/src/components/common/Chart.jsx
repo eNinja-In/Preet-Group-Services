@@ -31,13 +31,7 @@ const BarLineChart = ({ chartType, categories, data, title }) => {
       },
     },
   };
-
-  const series = [
-    {
-      name: title || 'Data Series',
-      data: data || [],
-    },
-  ];
+  const series = [{ name: title || 'Data Series', data: data || [], },];
 
   return (
     <div>
@@ -45,6 +39,9 @@ const BarLineChart = ({ chartType, categories, data, title }) => {
     </div>
   );
 };
+
+
+
 
 const PieChart = ({ data, title }) => {
   const options = {

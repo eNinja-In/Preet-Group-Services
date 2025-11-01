@@ -1,14 +1,15 @@
-import express from "express"; 
-import dotenv from "dotenv";  
+import express from "express";
+import dotenv from "dotenv";
 import connectDB from "./config/DB.js";
-import cors from "cors"; 
-import helmet from "helmet"; 
-import morgan from "morgan"; 
-import { createServer } from "http"; 
-import { Server } from "socket.io"; 
+import cors from "cors";
+import helmet from "helmet";
+import morgan from "morgan";
+import { createServer } from "http";
+import { Server } from "socket.io";
 import path from "node:path";
 import { fileURLToPath } from "url";
-import "colors"; 
+import "colors";
+import router from "./router/authRouter.js"
 
 
 dotenv.config(); // Load .env
@@ -24,13 +25,17 @@ app.get('/', (req, res) => {
 });
 
 const server = createServer(app);
-// app.use(helmet());
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
-// app.use(morgan("combined"));
+app.use(helmet());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("combined"));
+
 app.use(cors());
 connectDB();
 
+app.set("trust proxy", 10);
+
+app.use("/api/auth", router); // Auth routes
 
 const PORT = process.env.PORT || 8080; // Set port
 server.listen(PORT, () => {

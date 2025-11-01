@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function Login() {
-    const [UserID, setUserID] = useState("");
+    const [empCode, setEmpCode] = useState("");
     const [password, setPassword] = useState("");
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false); // Added loading state
@@ -21,7 +21,7 @@ export default function Login() {
                 `${import.meta.env.VITE_SERVER_LINK}/api/auth/login-user`,
                 {
                     method: "POST",
-                    body: JSON.stringify({ UserID, password }),
+                    body: JSON.stringify({ empCode, password }),
                     headers: { "Content-Type": "application/json" },
                 }
             );
@@ -29,6 +29,7 @@ export default function Login() {
             const result = await response.json(); // Parse JSON response once
             if (response.ok && result.success) {
                 localStorage.setItem("user", JSON.stringify(result));
+                console.error("Login error:", error);
                 navigate("/"); // Redirect to home
             } else {
                 setError(result.message || "Login failed. Please try again.");
@@ -40,6 +41,7 @@ export default function Login() {
             setLoading(false); // End loading
         }
     };
+
 
     return (
         <>
@@ -61,9 +63,9 @@ export default function Login() {
                                 <div className={style.input}>
                                     <input
                                         type="UserID"
-                                        value={UserID}
+                                        value={empCode}
                                         placeholder="UserID"
-                                        onChange={(e) => setUserID(e.target.value)}
+                                        onChange={(e) => setEmpCode(e.target.value)}
                                         required
                                     />
                                 </div>

@@ -7,7 +7,7 @@ import Footbar from './components/Bars/footbar'
 import Dashboard from './components/home/dashboard';
 
 import CompReg from './components/serviceDept/custromerComp';
-import TaskAssign from './components/serviceDept/taskAssign';
+import Attendence from './components/serviceDept/attendence';
 
 
 import Error from './components/other/error';
@@ -27,7 +27,7 @@ function AppContent() {
             <Route element={<Private />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/register-Complaint" element={<CompReg />} />
-              <Route path="/assign-task" element={<TaskAssign />} />
+              <Route path="/attendence-management" element={<Attendence />} />
               <Route path="/*" element={<Error />} />
             </Route>
             <Route path="/login" element={<Login />} />

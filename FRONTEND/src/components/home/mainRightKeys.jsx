@@ -7,7 +7,7 @@ export default function MainRight() {
         <div className={style.main}>
             {/* <Btn title={"Warranty Check"}></Btn> */}
             {/* <Btn title={"hello"}></Btn> */}
-            <CateogryTitle title={"ENGINE"} />
+            {/* <CateogryTitle title={"ENGINE"} /> */}
             <Btn title={"Engine Dispatch"}></Btn>
             {/* <Btn title={"Vehicle Assignment"}></Btn> */}
             {/* <Btn title={"Driver Tracking"}></Btn> */}
@@ -18,7 +18,7 @@ export default function MainRight() {
             {/* <Btn title={"hello"}></Btn> */}
             {/* <Btn title={"hello"}></Btn> */}
             {/* <Btn title={"hello"}></Btn> */}
-            <CateogryTitle title={"REPORTS"} />
+            {/* <CateogryTitle title={"REPORTS"} /> */}
             <Btn title={"PDI Reports"}></Btn>
             <Btn title={"Service Reports"}></Btn>
             {/* <Btn title={"hello"}></Btn> */}

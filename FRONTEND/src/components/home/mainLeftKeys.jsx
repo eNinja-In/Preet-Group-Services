@@ -8,14 +8,14 @@ export default function MainLeft() {
 
     return (
         <div className={style.main} >
-            <CateogryTitle title={"SERVICE"}/>
+            {/* <CateogryTitle title={"SERVICE"}/> */}
             <Btn click={"/register-Complaint"} title={"Complaint Registration"} />
-            <Btn title={"Attendance Management"} />
+            <Btn click={"/attendence-management"} title={"Attendance Management"} />
             <Btn title={"Customer Feedback"} />
             {/* <Btn click={"/assign-task"} title={"Assign Task"} /> */}
             <Btn title={"Work Progress Tracking"} />
             <Btn title={"Service Dispatch"} />
-            <CateogryTitle title={"SPARE PARTS"}/>
+            {/* <CateogryTitle title={"SPARE PARTS"}/> */}
             <Btn title={"Spare Parts Management"} />
             <Btn title={"Parts Return and Billing"} />
             {/* <Btn title={"Service Completion"} /> */}
