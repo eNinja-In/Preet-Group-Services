@@ -47,7 +47,6 @@
     background-color: #0766AD;
     color: white;
     border-width: 2px;
-
     &:hover {
         background-color: white;
         color: black;

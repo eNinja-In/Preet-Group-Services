@@ -9,7 +9,7 @@ export default function Login() {
     const [loading, setLoading] = useState(false); // Added loading state
     const navigate = useNavigate();
 
-    document.title = "login"
+    document.title = "LOGIN PREET GROUPS"
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -31,9 +31,7 @@ export default function Login() {
                 localStorage.setItem("user", JSON.stringify(result));
                 console.error("Login error:", error);
                 navigate("/"); // Redirect to home
-            } else {
-                setError(result.message || "Login failed. Please try again.");
-            }
+            } else { setError(result.message || "Login failed. Please try again."); }
         } catch (error) {
             console.error("Login error:", error);
             setError("An unexpected error occurred. Please try again later.");
@@ -47,47 +45,13 @@ export default function Login() {
         <>
             <div className={style.main}>
                 <div className={style.login}>
-                    <div className={style.loginHead}>
-                        <h1>PREET GROUPS SERVICES</h1>
-                    </div>
-                    <div className={style.loginError}>
-                        {error ? (
-                            <p className={style.error}>{error}</p>
-                        ) : (
-                            <p className={style.default}>  </p>
-                        )}
-                    </div>
+                    <div className={style.loginHead}><h1>PREET GROUPS SERVICES</h1></div>
+                    <div className={style.loginError}>{error ? (<p className={style.error}>{error}</p>) : (<p className={style.default}>  </p>)}</div>
                     <div className={style.loginForm}>
                         <form onSubmit={handleSubmit}>
-                            <div className={style.inputSection}>
-                                <div className={style.input}>
-                                    <input
-                                        type="UserID"
-                                        value={empCode}
-                                        placeholder="UserID"
-                                        onChange={(e) => setEmpCode(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className={style.inputSection}>
-                                <div className={style.input}>
-                                    <input
-                                        type="password"
-                                        value={password}
-                                        placeholder="Password"
-                                        onChange={(e) => setPassword(e.target.value)}
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className={style.submit}>
-                                <div className={style.submitBtn}>
-                                    <button type="submit" disabled={loading}>
-                                        {loading ? "Logging in..." : "Login"}
-                                    </button>
-                                </div>
-                            </div>
+                            <div className={style.inputSection}><div className={style.input}><input type="UserID" value={empCode} placeholder="UserID" onChange={(e) => setEmpCode(e.target.value)} required /></div></div>
+                            <div className={style.inputSection}><div className={style.input}> <input type="password" value={password} placeholder="Password" onChange={(e) => setPassword(e.target.value)} required /></div></div>
+                            <div className={style.submit}><div className={style.submitBtn}><button type="submit" disabled={loading}>{loading ? "Logging in..." : "Login"}</button></div></div>
                         </form>
                     </div>
                 </div>

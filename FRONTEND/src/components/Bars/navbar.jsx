@@ -34,7 +34,7 @@ export default function Navbar() {
                     <div className={style.rightOpt}>
                         <div className={style.authSection}>
 
-                            <button className={style.auth1}>ADMIN</button>
+                            <button className={style.auth1} onClick={() => {navigate('/admin-auth')}}>ADMIN</button>
                             {!auth ?
                             <span></span>
                                 // <button className={style.auth2}>

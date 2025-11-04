@@ -5,6 +5,8 @@ import MainLeft from './components/home/mainLeftKeys';
 import MainRight from './components/home/mainRightKeys';
 import Footbar from './components/Bars/footbar'
 import Dashboard from './components/home/dashboard';
+import AdminAuth from './components/auth/adminAuth';
+
 
 import CompReg from './components/serviceDept/custromerComp';
 import Attendence from './components/serviceDept/attendence';
@@ -27,7 +29,8 @@ function AppContent() {
             <Route element={<Private />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/register-Complaint" element={<CompReg />} />
-              <Route path="/attendence-management" element={<Attendence />} />
+              <Route path="/register-Complaint" element={<CompReg />} />
+              <Route path="/admin-auth" element={<AdminAuth />} />
               <Route path="/*" element={<Error />} />
             </Route>
             <Route path="/login" element={<Login />} />

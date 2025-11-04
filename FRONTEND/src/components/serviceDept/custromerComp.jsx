@@ -15,8 +15,6 @@ export default function CompReg() {
     const [data, setData] = useState({ Chassis: "", Customer: "", Dealer: "", Location: "", State: "", Hours: "", Problem: "", WarrentyChech: true, Warrenty: "", });
 
 
-
-
     const handleFetch = () => {
         if (EngineNo !== "") {
             setFetch(true);  // Trigger the data fetch
@@ -25,11 +23,13 @@ export default function CompReg() {
 
         }
     };
+    
+
 
     return (
         <>
             <div className={style.main}>
-                <PopUp />
+                {/* <PopUp /> */}
                 <div className={style.compForm}>
                     <div className={style.form}>
                         {/* Data Fetch Form */}
