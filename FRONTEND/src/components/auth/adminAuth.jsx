@@ -1,20 +1,22 @@
 import style from './adminAuth.module.css'
 import { useEffect, useState } from 'react'
+import { useNavigate, Link } from "react-router-dom";
 
 export default function AdminAuth() {
+    const auth = JSON.parse(localStorage.getItem("user"))
+    const navigate = useNavigate();
+
     const [name, setName] = useState('')
-    const [_id, setID] = useState('')
+    const _id = (`${auth.user.id}`)
     const [adminCode, setAdminCode] = useState('')
     const [passKey, setPassKey] = useState('')
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false); // Added loading state
 
 
-    const auth = JSON.parse(localStorage.getItem("user"))
     useEffect(() => {
         if (auth && auth.user && auth.user.name) {
             setName(auth.user.name);
-            setID(auth.user.id)
         }
     }, []);
 
@@ -28,25 +30,25 @@ export default function AdminAuth() {
                 `${import.meta.env.VITE_SERVER_LINK}/api/auth/login-admin`,
                 {
                     method: "POST",
-                    body: JSON.stringify({ _id, adminCode, passKey }),
+                    body: JSON.stringify({ _id, adminCode, adminKey: passKey }),
                     headers: { "Content-Type": "application/json" },
                 }
             );
 
             const result = await response.json(); // Parse JSON response once
             if (response.ok && result.success) {
-                localStorage.setItem("user", JSON.stringify(result));
-                console.error("Login error:", error);
+                // localStorage.setItem("user", JSON.stringify(result));
                 navigate("/"); // Redirect to home
-            } else { setError(result.message || "Login failed. Please try again."); }
-        } catch (error) {
-            console.error("Login error:", error);
+            }
+            else { setError(result.message || "Login failed. Please try again."); }
+        }
+        catch (error) {// alert.error("Login error:", error);
             setError("An unexpected error occurred. Please try again later.");
-        } finally {
+        }
+        finally {
             setLoading(false); // End loading
         }
     };
-
 
     return (
         <div className={style.main}>

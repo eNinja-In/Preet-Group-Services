@@ -57,7 +57,7 @@ export const adminController = async (req, res) => {
     try {
         const { _id, adminCode, adminKey } = req.body;
 
-        if (!_id || !adminCode || !adminKey) { return res.status(400).json({ success: false, message: "All Credentials are required.", }); }
+        if (!_id || !adminCode || !adminKey) { return res.status(400).json({ success: false, message: `All Credentials are required. ${ adminCode, adminKey }`}); }
 
         const user = await UserModel.findOne({ _id });
         if (!user.admin) { return res.status(404).json({ success: false, message: "YOU ARE NOT ADMIN", }); }

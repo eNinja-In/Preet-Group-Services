@@ -29,7 +29,7 @@ function AppContent() {
             <Route element={<Private />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/register-Complaint" element={<CompReg />} />
-              <Route path="/register-Complaint" element={<CompReg />} />
+              <Route path="/attendence-management" element={<Attendence />} />
               <Route path="/admin-auth" element={<AdminAuth />} />
               <Route path="/*" element={<Error />} />
             </Route>

@@ -1,19 +1,31 @@
-import { useState } from "react"
-export default function PopUp(prope) {
-    const [popup, setPopUp] = useState(false)
-    const Data = prope
+import { useState } from "react";
+import style from "./PopUp.module.css"; // Import the CSS file
+
+export default function PopUp(props) {
+    const Data = props.data;  // Assuming data is passed as a prop
+    const Click = props.Click;
+    const title = props.title;
     return (
-        <>
-            {popup ? '' :
-                <div className="m" style={{ width: '100vw', height: "100vh", backgroundColor: 'black', position: 'fixed', top: '0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-                    <div className="p" style={{ width: '85%', backgroundColor: 'blue', height: '20%', padding: "2%", borderRadius: '15px', border: '5px solid white' }}>
-                        <div className="n" style={{ width: '100%', backgroundColor: 'green', height: '100%' }}>
-                            {/* {Data ? (() => (Data).map(([title, value], i) => {
-                                .da>
-                             })) : console.log("NaN")} */}
+        <div className={style.main}>
+            {/* Fix: Wrap the function call inside an anonymous function */}
+            <div className={style.popup} >
+                {/* Inline SVG for the close icon */}
+                <div className={style.closer} onClick={() => Click(false)}>
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40">
+                        <path d="M12 10.293l-4.707-4.707-1.414 1.414L10.293 12l-4.707 4.707 1.414 1.414L12 13.707l4.707 4.707 1.414-1.414L13.707 12l4.707-4.707-1.414-1.414z" />
+                    </svg>
+                </div>
+                <h2 className={style.heading}>{title}</h2>
+                <div className={style.dataList}>
+                    {/* Render each item from the data */}
+                    {Data && Object.entries(Data).map(([title, value], i) => (
+                        <div key={i} className={style.popupItem}>
+                            <div className={style.title}>{title}</div>
+                            <div className={style.value}>{value}</div>
                         </div>
-                    </div>
-                </div>}
-        </>
-    )
+                    ))}
+                </div>
+            </div>
+        </div>
+    );
 }

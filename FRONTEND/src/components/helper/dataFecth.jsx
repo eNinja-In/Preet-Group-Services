@@ -9,11 +9,14 @@ export const fetchData = async (EngineNo, setData) => {
             Hours: 100,  // Example
             Problem: `${EngineNo}`,
             WarrentyChech: true,
-            Warrenty: `${EngineNo}`,
+            Warrenty: `OUT OF WARRENTY`,
         };
         setData(fetchedData);
     } catch (error) {alert.error("Error fetching data:", error);}
 };
+
+
+
 
 export const regComplaint = async (EngineNo, data) => {
     const chassis = data.Chassis;

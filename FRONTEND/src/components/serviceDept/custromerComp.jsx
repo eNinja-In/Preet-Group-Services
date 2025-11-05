@@ -1,5 +1,5 @@
 import style from "./CSS/custromerComp.module.css"
-import { useState } from "react";
+import { use, useState } from "react";
 import { fetchData } from "../helper/dataFecth";
 import PopUp from "../common/PopUp";
 
@@ -7,6 +7,8 @@ export default function CompReg() {
     const [EngineNo, setEngineNo] = useState("");
     const [WarrentyChech, setWarrentyChech] = useState(true);
     const [Warrenty, setWarrenty] = useState("");
+
+    const [popup, setPopUp] = useState(false)
 
     const [Fetch, setFetch] = useState(false);
     const [Register, setRegister] = useState(false);
@@ -20,16 +22,14 @@ export default function CompReg() {
             setFetch(true);  // Trigger the data fetch
             fetchData(EngineNo, setData);  // Call the helper function to fetch data
             setFetch(false);  // Trigger the data fetch
-
+            setPopUp(true)
         }
     };
-    
-
 
     return (
         <>
             <div className={style.main}>
-                {/* <PopUp /> */}
+                {popup ? <PopUp data={data} Click={setPopUp}  title={'Engine Information'} /> : ''}
                 <div className={style.compForm}>
                     <div className={style.form}>
                         {/* Data Fetch Form */}

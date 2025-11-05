@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const userSchema = new mongoose.Schema({
+const combineSchema = new mongoose.Schema({
     model: { type: Number, required: true, minlength: 3 },
     engineNo: { type: String, required: true, unique: true },
     chassisNo: { type: String, unique: true },
@@ -14,5 +14,5 @@ const userSchema = new mongoose.Schema({
 
 
 // Create and export the UserModel
-const UserModel = mongoose.model("CombineData", userSchema);
-export default UserModel;
+const CombineModel = mongoose.model("CombineData", combineSchema);
+export default CombineModel;
