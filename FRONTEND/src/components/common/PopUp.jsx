@@ -18,12 +18,19 @@ export default function PopUp(props) {
                 <h2 className={style.heading}>{title}</h2>
                 <div className={style.dataList}>
                     {/* Render each item from the data */}
-                    {Data && Object.entries(Data).map(([title, value], i) => (
-                        <div key={i} className={style.popupItem}>
-                            <div className={style.title}>{title}</div>
-                            <div className={style.value}>{value}</div>
-                        </div>
-                    ))}
+                    {Data && (
+                        typeof Data === 'object' && !Array.isArray(Data) ? (
+                            Object.entries(Data).map(([title, value], i) => (
+                                <div key={i} className={style.popupItem}>
+                                    <div className={style.title}>{title}</div>
+                                    <div className={style.value}>{value}</div>
+                                </div>
+                            ))
+                        ) : (
+                            <strong>{Data}</strong> // If it's not an object (like a string or number), just display it
+                        )
+                    )}
+
                 </div>
             </div>
         </div>

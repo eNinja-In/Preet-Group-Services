@@ -29,7 +29,7 @@ export default function CompReg() {
     return (
         <>
             <div className={style.main}>
-                {popup ? <PopUp data={data} Click={setPopUp}  title={'Engine Information'} /> : ''}
+                {popup ? <PopUp data={data} Click={setPopUp} title={'Engine Information'} /> : ''}
                 <div className={style.compForm}>
                     <div className={style.form}>
                         {/* Data Fetch Form */}
@@ -102,29 +102,27 @@ export default function CompReg() {
                                         onChange={(e) => setData((prev) => ({ ...prev, Dealer: e.target.value }))}
                                     />
                                 </div>
-                                <div className={style.locaionForm}>
-                                    <div className={style.inputSection} style={{ width: '60%' }}>
-                                        <input
-                                            type="text"
-                                            value={data.Location}
-                                            placeholder="Location"
-                                            onChange={(e) => setData((prev) => ({ ...prev, Location: e.target.value }))}
-                                        />
-                                    </div>
-                                    <div className={style.inputSection} style={{ width: '30%' }}>
-                                        <input
-                                            type="text"
-                                            value={data.State}
-                                            placeholder="State"
-                                            onChange={(e) => setData((prev) => ({ ...prev, State: e.target.value }))}
-                                            required
-                                        />
-                                    </div>
+                                <div className={style.inputSection}>
+                                    <input
+                                        type="text"
+                                        value={data.Location}
+                                        placeholder="Location"
+                                        onChange={(e) => setData((prev) => ({ ...prev, Location: e.target.value }))}
+                                    />
+                                </div>
+                                <div className={style.inputSection}>
+                                    <input
+                                        type="text"
+                                        value={data.State}
+                                        placeholder="State"
+                                        onChange={(e) => setData((prev) => ({ ...prev, State: e.target.value }))}
+                                        required
+                                    />
                                 </div>
                                 <div className={style.inputSection}>
                                     <input
                                         type="number"
-                                        style={{ width: '25%', padding: '2%' }}
+                                        // style={{ width: '25%', padding: '2%' }}
                                         value={data.Hours}
                                         placeholder="Working Hours"
                                         onChange={(e) => setData((prev) => ({ ...prev, Hours: e.target.value }))}

@@ -10,41 +10,69 @@ import { Server } from "socket.io";
 import path from "node:path";
 import { fileURLToPath } from "url";
 import "colors";
-import router from "./router/authRouter.js"
+import router from "./router/authRouter.js";
+import attenRouter from './router/attenRouter.js';
 
+// Load environment variables
+dotenv.config();
 
-dotenv.config(); // Load .env
-
+// Get current file and directory paths
 const __filename = fileURLToPath(import.meta.url); // Current file path
-const __dirname = path.dirname(__filename);
+const __dirname = path.dirname(__filename); // Directory name
 
-const app = express(); // Express app
+// Initialize Express app
+const app = express();
 
-app.use(helmet());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
-app.use(morgan("combined"));
-app.use(cors());
+// Middlewares
+app.use(helmet()); // Adds security headers to the app
+app.use(express.json()); // Middleware for parsing JSON bodies
+app.use(express.urlencoded({ extended: true })); // Middleware for parsing URL-encoded bodies
+app.use(morgan("combined")); // HTTP request logger
+app.use(cors()); // Enables Cross-Origin Resource Sharing (CORS)
+
+// Connect to MongoDB database
 connectDB();
 
-const limiter = rateLimit({
-  windowMs: 10 * 60 * 1000,
-  max: 5,
+// Rate Limiting for /api/auth/*
+const authLimiter = rateLimit({
+  windowMs: 10 * 60 * 1000, // 10 minutes
+  max: 5, // Max 5 requests per 10 minutes
   message: "Too many requests from this IP, please try again later.",
+  keyGenerator: (req) => req.ip, // Rate limit by IP address
 });
 
-app.set("trust proxy", 10);
+// Apply rate limiter only on /api/auth routes
+app.use("/api/auth", authLimiter);
 
-app.use(limiter); // Apply rate limiter
-app.use("/api/auth", router);
+// Apply routes
+app.use("/api/auth", router); // Authentication routes
+app.use("/api/attendence", attenRouter); // Attendance routes
 
+// Socket.IO real-time communication setup
+const server = createServer(app); // Create HTTP server for socket.io
 
-const server = createServer(app); // Create HTTP server
-const io = new Server(server, {
-  cors: { origin: "*" },
+// Dynamic origin for CORS, defaults to all if not set
+const io = new Server(server, { cors: { origin: process.env.FRONTEND_URL || "*", }, });
+
+// Socket.IO connection event
+io.on("connection", (socket) => {
+  console.log("New client connected: ", socket.id);
+  socket.on("disconnect", () => { console.log("Client disconnected: ", socket.id); });
 });
 
-const PORT = process.env.PORT || 8080; // Set port
+// Centralized error handler for catching async errors and unhandled errors
+app.use((err, req, res, next) => {
+  console.error(err.stack); // Log error stack trace for debugging
+
+  // If the error is client-side related, send a 400/4xx status
+  if (err.isClientError) { res.status(err.status || 400).json({ success: false, message: err.message }); }
+
+  // For server-side errors, send a 500
+  else { res.status(500).json({ success: false, message: "Internal Server Error" }); }
+});
+
+// Start the server
+const PORT = process.env.PORT || 8080; // Default port is 8080 if not specified in the .env
 server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  console.log(`Server running on port ${PORT}`.green);
 });

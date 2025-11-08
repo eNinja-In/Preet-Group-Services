@@ -39,8 +39,6 @@ export default function Login() {
             setLoading(false); // End loading
         }
     };
-
-
     return (
         <>
             <div className={style.main}>

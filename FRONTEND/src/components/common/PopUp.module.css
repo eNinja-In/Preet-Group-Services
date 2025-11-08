@@ -20,7 +20,8 @@
 .popup {
     width: 50%;
     background-color: white;
-    height: 50%;
+    min-height: 20%;
+    max-height: max-content;
     padding: 1%;
     border-radius: 15px;
     border: 5px solid blue;
@@ -52,6 +53,7 @@
     overflow-y: auto; /* If the content overflows, it will be scrollable */
     overflow-x: hidden;
     display: flex;
+    justify-content: center;
     flex-direction: column;
 }
 
@@ -83,4 +85,13 @@
     text-align: left;
     font-size: 110%;
     border-bottom: 2px dotted black;
+}
+
+.dataList strong{
+    width: 100%;
+    text-align: center;
+    font-size: 200%;
+    color: red;
+    font-weight: bold;
+
 }

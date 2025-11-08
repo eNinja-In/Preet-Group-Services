@@ -71,7 +71,7 @@ export const adminController = async (req, res) => {
 
         console.log(`ADMIN ACCESS : ${user.name} (${user.empCode}) ${new Date().toLocaleString()}`);
 
-        res.status(200).json({ success: true, message: "ADMIN ACCESS SUCCESSFULLY", user: { id: user._id, name: user.name }, token, });
+        res.status(200).json({ success: true, message: "ADMIN ACCESS SUCCESSFULLY", admin: { id: user._id, name: user.name }, token, });
 
     } catch (error) { res.status(500).json({ success: false, message: "ACCESS DENIED DUE TO SERVER FAILURE", error: error.message, }); }
 };
