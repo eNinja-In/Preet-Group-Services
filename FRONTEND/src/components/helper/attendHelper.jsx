@@ -8,32 +8,20 @@ async function RegAttend(empCode, data) {
             `${import.meta.env.VITE_SERVER_LINK}/api/attendence/register`,
             {
                 method: "POST",
-                body: JSON.stringify({
-                    empCode,
-                    engineNo,      // engineNo (string) to be appended
-                    contact,           // contact (number, optional)
-                    Location: location, // Location (string) to be appended
-                    state: state,     // state (string) to be appended
-                    date,              // date (string) to be appended
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                body: JSON.stringify({ empCode, engineNo, contact, Location: location, state: state, date, }),
+                headers: { "Content-Type": "application/json", },
             }
         );
 
         const result = await response.json();
 
         // Check if the response is successful
-        if (response.ok && result.success) {
-            console.log("Attendance registered successfully", result.message);
-            // Additional logic on success, if necessary
-        } else {
-            console.error("Error: ", result.message || "Failed to register attendance.");
-        }
+        if (response.ok && result.success) { console.log("Attendance registered successfully", result.message); }
+        else { console.error("Error: ", result.message || "Failed to register attendance."); }
 
-    } catch (error) {
-        // Handle any errors that occur during the fetch request
+    }
+    // Handle any errors that occur during the fetch request
+    catch (error) {
         console.error("Error while registering attendance: ", error);
         // alert("Error while registering attendance. Please try again.");
     }
@@ -56,8 +44,8 @@ async function FetAttend(empCode, setData, setError) {
         if (response.ok && result.success) {
             // Function to get the last item from a comma-separated string
             const getLastItem = (str) => {
-                const items = str.split(',').map(item => item.trim()); // Split and remove any extra spaces
-                return items[items.length - 1]; // Return the last item
+                const items = str.split(',').map(item => item.trim()); // Split and remove any extra spaces Return the last item
+                return items[items.length - 1];
             };
 
             // Map the fetched data and extract the last item from each field
@@ -103,18 +91,8 @@ async function createNewAttendence(empCode, data) {
             `${import.meta.env.VITE_SERVER_LINK}/api/attendence/new-attendance`,
             {
                 method: "POST",
-                body: JSON.stringify({
-                    empCode,
-                    name,
-                    engineNo,        // engineNo (string)
-                    contact,         // contact (optional)
-                    Location: location,  // Location (string)
-                    state,           // state (string)
-                    date,            // date (string)
-                }),
-                headers: {
-                    "Content-Type": "application/json",
-                },
+                body: JSON.stringify({ empCode, name, engineNo, contact, Location: location, state, date, }),
+                headers: { "Content-Type": "application/json", },
             }
         );
 
@@ -136,4 +114,4 @@ async function createNewAttendence(empCode, data) {
 }
 
 
-export { RegAttend, FetAttend, EditAttend };
+export { RegAttend, FetAttend, EditAttend, createNewAttendence };
