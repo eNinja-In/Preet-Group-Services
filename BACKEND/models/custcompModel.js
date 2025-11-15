@@ -19,7 +19,7 @@ const custCompSch = new mongoose.Schema({
     customerName: { type: String, trim: true },
     contact: { type: String, required: true, trim: true },
     location: { type: String, trim: true },
-    // ipAdr: { type: String, trim: true },
+    ipAdr: { type: String, trim: true },
     problem: { type: String, required: true }
 }, { timestamps: true });
 
