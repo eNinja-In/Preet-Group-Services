@@ -1,3 +1,31 @@
+/**
+ * -----------------------------------------------------------------------------
+ * 1. Purpose:
+ *    This file configures and launches the main Express server with:
+ *      - Secure HTTP headers (Helmet)
+ *      - Rate limiting for authentication routes
+ *      - MongoDB connection
+ *      - Centralized error handling
+ *      - Socket.IO real-time communication
+ *      - Parsing & logging middleware
+ *
+ * 2. Security Features:
+ *    - Helmet with secure defaults (Prevents XSS, clickjacking, MIME sniffing)
+ *    - Strict CORS (origin restricted to FRONTEND_URL in production)
+ *    - Rate limiting added to prevent brute-force login attempts
+ *    - Enforces JSON parsing limits to prevent payload attacks
+ *    - Centralized sanitized error responses
+ *
+ * 3. Application Structure:
+ *    - /api/auth         → Authentication Routes
+ *    - /api/attendence   → Attendance Routes
+ *    - Socket.IO         → Real-time connection events
+ *
+ * 4. Notes:
+ *    - Make sure `.env` contains PORT, MONGO_URI, JSON_SECRET_KEY, FRONTEND_URL
+ *    - Use HTTPS + Proxy reverse server (Nginx) in production
+ * -----------------------------------------------------------------------------
+ */
 import express from "express";
 import rateLimit from "express-rate-limit";
 import dotenv from "dotenv";
@@ -10,69 +38,96 @@ import { Server } from "socket.io";
 import path from "node:path";
 import { fileURLToPath } from "url";
 import "colors";
-import router from "./router/authRouter.js";
-import attenRouter from './router/attenRouter.js';
 
-// Load environment variables
+import router from "./router/authRouter.js";
+import attenRouter from "./router/attenRouter.js";
+import combineRouter from "./router/combineRouter.js";
+
 dotenv.config();
 
-// Get current file and directory paths
-const __filename = fileURLToPath(import.meta.url); // Current file path
-const __dirname = path.dirname(__filename); // Directory name
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-// Initialize Express app
 const app = express();
 
-// Middlewares
-app.use(helmet()); // Adds security headers to the app
-app.use(express.json()); // Middleware for parsing JSON bodies
-app.use(express.urlencoded({ extended: true })); // Middleware for parsing URL-encoded bodies
-app.use(morgan("combined")); // HTTP request logger
-app.use(cors()); // Enables Cross-Origin Resource Sharing (CORS)
+// -----------------------------------------------------------------------------
+// Global Middleware
+// -----------------------------------------------------------------------------
 
-// Connect to MongoDB database
+app.use(
+  helmet({
+    contentSecurityPolicy: false, // Adjust if serving inline scripts
+    crossOriginResourcePolicy: { policy: "cross-origin" },
+  })
+);
+
+app.use(express.json({ limit: "10kb" }));          
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("combined"));                       
+
+app.use(
+  cors({
+    origin:
+      process.env.NODE_ENV === "production"
+        ? process.env.FRONTEND_URL
+        : "*",
+    credentials: true,
+  })
+);
+
+// Connect to DB
 connectDB();
 
-// Rate Limiting for /api/auth/*
+// -----------------------------------------------------------------------------
+// Rate Limiting — specific to authentication routes
+// -----------------------------------------------------------------------------
 const authLimiter = rateLimit({
   windowMs: 10 * 60 * 1000, // 10 minutes
-  max: 5, // Max 5 requests per 10 minutes
-  message: "Too many requests from this IP, please try again later.",
-  keyGenerator: (req) => req.ip, // Rate limit by IP address
+  max: 5,
+  message: { success: false, message: "Too many attempts. Try again later.", },
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 
-// Apply rate limiter only on /api/auth routes
+// Apply rate limiter for auth endpoints
 app.use("/api/auth", authLimiter);
 
-// Apply routes
-app.use("/api/auth", router); // Authentication routes
-app.use("/api/attendence", attenRouter); // Attendance routes
+// -----------------------------------------------------------------------------
+// API Routes
+// -----------------------------------------------------------------------------
+app.use("/api/auth", router);
+app.use("/api/attendence", attenRouter);
+app.use("/api/combine", combineRouter);
 
-// Socket.IO real-time communication setup
-const server = createServer(app); // Create HTTP server for socket.io
+// -----------------------------------------------------------------------------
+// Socket.IO Configuration
+// -----------------------------------------------------------------------------
+const server = createServer(app);
+const io = new Server(server, {
+  cors: { origin: process.env.FRONTEND_URL || "*", },
+});
 
-// Dynamic origin for CORS, defaults to all if not set
-const io = new Server(server, { cors: { origin: process.env.FRONTEND_URL || "*", }, });
-
-// Socket.IO connection event
 io.on("connection", (socket) => {
-  console.log("New client connected: ", socket.id);
-  socket.on("disconnect", () => { console.log("Client disconnected: ", socket.id); });
+  console.log(`Socket connected: ${socket.id}`.yellow);
+
+  socket.on("disconnect", () => { console.log(`Socket disconnected: ${socket.id}`.red); });
 });
 
-// Centralized error handler for catching async errors and unhandled errors
+// -----------------------------------------------------------------------------
+// Centralized Error Handler
+// -----------------------------------------------------------------------------
 app.use((err, req, res, next) => {
-  console.error(err.stack); // Log error stack trace for debugging
+  console.error("ERROR:", err.stack.red);
 
-  // If the error is client-side related, send a 400/4xx status
-  if (err.isClientError) { res.status(err.status || 400).json({ success: false, message: err.message }); }
+  // Known client error
+  if (err.isClientError) { return res.status(err.status || 400).json({ success: false, message: err.message, }); }
 
-  // For server-side errors, send a 500
-  else { res.status(500).json({ success: false, message: "Internal Server Error" }); }
+  // Unknown server error
+  return res.status(500).json({ success: false, message: "Internal Server Error", });
 });
 
-// Start the server
-const PORT = process.env.PORT || 8080; // Default port is 8080 if not specified in the .env
-server.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`.green);
-});
+// -----------------------------------------------------------------------------
+// Start Server
+// -----------------------------------------------------------------------------
+const PORT = process.env.PORT || 8080;
+server.listen(PORT, () => { console.log(`🔥 Server running on port ${PORT}`.green); });

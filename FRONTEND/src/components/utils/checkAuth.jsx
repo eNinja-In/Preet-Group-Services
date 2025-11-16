@@ -24,12 +24,12 @@ export const checkAuth = async (setIsAuth) => {
         const { success } = await res.json();
         if (success) return setIsAuth(true);
 
-        // localStorage.removeItem("token");
+        localStorage.removeItem("user");
         setIsAuth(false);
 
     } catch (error) {
         console.error("Authentication check failed:", error);
-        // localStorage.removeItem("token");
+        // localStorage.removeItem("user");
         setIsAuth(false);
     }
 };

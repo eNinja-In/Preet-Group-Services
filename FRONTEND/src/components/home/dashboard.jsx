@@ -11,7 +11,6 @@ export default function Dashboard() {
                 <BarLineChart chartType="bar" categories={barCategories} data={barData} title="Monthly Sales" />
                 <BarLineChart chartType="line" categories={barCategories} data={barData} title="Sales Over Time" />
                 <PieChart chartType="pie"categories={pieCategories} data={pieData} title="Category Distribution" />
-                {/* <Chart chartType="line" categories={barCategories} data={barData} title="Sales Over Time"/> */}
             </div>
         </div>
     )
