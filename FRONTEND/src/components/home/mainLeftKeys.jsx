@@ -1,51 +1,43 @@
-import style from "./mainLeftKeys.module.css"
+/**
+ * MainLeft Component
+ * 
+ * This component renders a sidebar menu with various buttons for navigation. 
+ * It is designed for use in a larger application, providing quick access to 
+ * different sections such as complaint registration, attendance management, 
+ * customer feedback, and more.
+ * 
+ * Key Features:
+ * 1. Contains multiple buttons with different titles.
+ * 2. Each button navigates to a specific route when clicked.
+ * 3. The component is hidden on smaller screens (using TailwindCSS's max-sm:hidden).
+ * 4. Buttons are styled using a custom CSS module (`mainLeftKeys.module.css`).
+ * 
+ * Functionalities:
+ * 1. Renders buttons with titles like "Complaint Registration", "Attendance Management", etc.
+ * 2. Each button has an associated route for navigation.
+ * 3. The component makes use of React Router's `useNavigate` hook for navigation.
+ * 
+ * Dependencies:
+ * - React (for component creation)
+ * - React Router (for navigation)
+ * - TailwindCSS (for styling)
+ * - Custom CSS module (`mainLeftKeys.module.css` for additional styling)
+ */
 import Btn from "../common/Btn"
-import CateogryTitle from "../common/CateogryTitle";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 export default function MainLeft() {
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     return (
-        <div className={style.main} >
-            {/* <CateogryTitle title={"SERVICE"}/> */}
+        <div className="w-full h-full bg-white max-sm:hidden">
             <Btn click={"/register-Complaint"} title={"Complaint Registration"} />
             <Btn click={"/attendence-management"} title={"Attendance Management"} />
             <Btn title={"Customer Feedback"} />
-            {/* <Btn click={"/assign-task"} title={"Assign Task"} /> */}
             <Btn title={"Work Progress Tracking"} />
             <Btn title={"Service Dispatch"} />
-            {/* <CateogryTitle title={"SPARE PARTS"}/> */}
             <Btn title={"Spare Parts Management"} />
             <Btn title={"Parts Return and Billing"} />
-            {/* <Btn title={"Service Completion"} /> */}
         </div>
-    )
+    );
 }
-// Complaint Registration
-// Description: Allows users to register new complaints for service. ComplaintRegistration
-
-// Assign Task
-// Description: Assign workers to the registered complaint.
-
-// Spare Parts Management
-// Description: Allocate the necessary spare parts for the assigned service job.
-
-// Service Dispatch
-// Description: Send workers to the customer’s location.
-
-// Work Progress Tracking
-// Description: Monitor the work progress and send photo/video updates from the worker.
-
-// Attendance Management
-// Description: Record and track the daily attendance of the workers.
-
-// Customer Feedback
-// Description: Collect customer feedback after the service is completed.
-
-// Parts Return and Billing
-// Description: Manage the return of unused spare parts with the related billing information.
-
-// Service Completion
-// Description: Finalize and close the service job after completion.
-

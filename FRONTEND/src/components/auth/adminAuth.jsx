@@ -80,7 +80,7 @@ export default function AdminAuth() {
 
     return (
         // Main container for the page (full-screen, centered form)
-        <div className="w-screen h-screen bg-black bg-opacity-90 flex justify-center items-center">
+        <div className="w-[100vw] h-[100vh] top-0 left-0 bg-black bg-opacity-90 flex justify-center items-center fixed">
             {/* Form container with styling */}
             <div className="w-1/3 bg-white rounded-2xl border-8 border-blue-500 flex">
                 <form className="w-full h-full flex flex-col p-8">
