@@ -19,23 +19,23 @@ export const textController = async (req, res) => res.send("Protected Route");
 // 9. Response: On successful login, returns a 200 status with the user data and JWT token.
 // 10. Error Handling: Catches any errors during the process and returns a 500 status with the error message.
 export const loginController = async (req, res) => {
-  try {
-    const { empCode, password } = req.body;
-    if (!empCode || !password) return res.status(400).json({ success: false, message: "Email and password required." });
+    try {
+        const { empCode, password } = req.body;
+        if (!empCode || !password) return res.status(400).json({ success: false, message: "Email and password required." });
 
-    const user = await UserModel.findOne({ empCode });
-    if (!user) return res.status(404).json({ success: false, message: "User not found." });
+        const user = await UserModel.findOne({ empCode });
+        if (!user) return res.status(404).json({ success: false, message: "User not found." });
 
-    const isMatch = await comparePassword(password, user.password);
-    if (!isMatch) return res.status(401).json({ success: false, message: "Incorrect password." });
+        const isMatch = await comparePassword(password, user.password);
+        if (!isMatch) return res.status(401).json({ success: false, message: "Incorrect password." });
 
-    const token = JWT.sign({ _id: user._id }, process.env.JSON_SECRET_KEY, { expiresIn: "1h" });
-    console.log(`Login: ${user.name} (${empCode}) ${new Date().toLocaleString()}`);
+        const token = JWT.sign({ _id: user._id }, process.env.JSON_SECRET_KEY, { expiresIn: "1h" });
+        console.log(`Login: ${user.name} (${empCode}) ${new Date().toLocaleString()}`.bgGreen.white);
 
-    res.status(200).json({ success: true, message: "Login successful.", user: { id: user._id, name: user.name }, token });
-  } catch (err) {
-    res.status(500).json({ success: false, message: "Server error.", error: err.message });
-  }
+        res.status(200).json({ success: true, message: "Login successful.", user: { id: user._id, name: user.name }, token });
+    } catch (err) {
+        res.status(500).json({ success: false, message: "Server error.", error: err.message });
+    }
 };
 
 
@@ -50,19 +50,20 @@ export const registerController = async (req, res) => {
     try {
         const { empCode, name, email, password } = req.body;
 
-        if (!empCode || !name || !email || !password) return res.status(400).json({ success: false, message: "All Credentials are required." }); 
+        if (!empCode || !name || !email || !password) return res.status(400).json({ success: false, message: "All Credentials are required." });
 
         const existingUser = await UserModel.findOne({ empCode });
-        if (existingUser.admin) return res.status(409).json({ success: false, message: "User already registered." }); 
+        if (existingUser) return res.status(409).json({ success: false, message: "User already registered." });
 
         const hashedPassword = await hashPassword(password);
 
         const newUser = await new UserModel({ empCode, name, email, password: hashedPassword }).save();
 
         res.status(201).json({ success: true, message: "Registration successful.", user: { id: newUser._id, name: newUser.name, email: newUser.email } });
+        console.log(`User: ${name} (${empCode}) Registerd Successifully ${new Date().toLocaleString()} By {}`.bgGreen.white);
 
-    } catch (error) { 
-        res.status(500).json({ success: false, message: "Registration failed due to server error.", error: error.message }); 
+    } catch (error) {
+        res.status(500).json({ success: false, message: "Registration failed due to server error.", error: error.message });
     }
 };
 
@@ -90,9 +91,8 @@ export const adminController = async (req, res) => {
 
         const token = JWT.sign({ _id: user._id }, process.env.JSON_SECRET_KEY, { expiresIn: "1h" });
 
-        console.log(`ADMIN ACCESS : ${user.name} (${user.empCode}) ${new Date().toLocaleString()}`);
-
         res.status(200).json({ success: true, message: "ADMIN ACCESS SUCCESSFUL", admin: { id: user._id, name: user.name }, token });
+        console.log(`ADMIN ACCESS : ${user.name} (${user.empCode}) ${new Date().toLocaleString()}`.bgGreen);
 
     } catch (error) {
         res.status(500).json({ success: false, message: "ACCESS DENIED DUE TO SERVER FAILURE", error: error.message });

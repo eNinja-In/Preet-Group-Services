@@ -17,10 +17,18 @@ export const regAttndence = async (req, res) => {
         const emp = await DailyAttendence.findOne({ empCode });
         if (!emp) return res.status(404).json({ success: false, message: 'Employee not found.' });
 
-        [engineNo, Location, state, date, problem].forEach((data, index) => emp[Object.keys(emp)[index + 1]].push(data));
+        // [engineNo, Location, state, date, problem].forEach((data, index) => emp[Object.keys(emp)[index + 1]].push(data));
+        const fieldsToUpdate = ['engineNo', 'contact', 'Location', 'state', 'date', 'problem' ];
+        fieldsToUpdate.forEach((field, index) => {
+            if (!Array.isArray(emp[field])) {
+                emp[field] = [];  // Initialize as an empty array if it's not already an array
+            }
+            emp[field].push(req.body[Object.keys(req.body)[index + 1]]);  // Push the value to the corresponding array
+        });
 
         await emp.save();
         res.status(200).json({ success: true, message: 'Attendance registered.', employee: { id: emp._id, name: emp.name } });
+        console.log(`Employee Attendence Registerd Successfully: EmpCode: ${empCode} ON: ${date} `.green)
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Server error.' });
@@ -39,13 +47,14 @@ export const regAttndence = async (req, res) => {
 // 9. Error Handling: Catches unexpected errors and returns a 500 server error response.
 export const newAttndence = async (req, res) => {
     try {
-        const { empCode, name, engineNo, contact, Location, state, date } = req.body;
-        if (![empCode, engineNo, Location, state, contact, date].every(Boolean)) return res.status(400).json({ success: false, message: "All fields are required." });
+        const { empCode, name, engineNo, contact, Location, state, date, problem } = req.body;
+        if (![empCode, engineNo, Location, state, contact, date, problem].every(Boolean)) return res.status(400).json({ success: false, message: "All fields are required." });
 
         if (await DailyAttendence.findOne({ empCode })) return res.status(409).json({ success: false, message: "Employee with this empCode already exists." });
 
-        const newEmployee = await DailyAttendence.create({ empCode, name, contact, engineNo: [engineNo], Location: [Location], state: [state], date: [date] });
+        const newEmployee = await DailyAttendence.create({ empCode, name, contact, engineNo: [engineNo], Location: [Location], state: [state], date: [date], problem: problem });
         res.status(201).json({ success: true, message: "Attendance registered successfully.", employee: { id: newEmployee._id, name: newEmployee.name } });
+        console.log(`New Employee Registerd Successfully: EmpCode: ${empCode} `.bgGreen)
 
     } catch (error) {
         console.error(error);
@@ -73,13 +82,14 @@ export const fetchAttendence = async (req, res) => {
         const data = {
             name: emp.name,
             contact: emp.contact,
-            engineNo: emp.engineNo.join(", "),
-            location: emp.Location.join(", "),
-            state: emp.state.join(", "),
-            date: emp.date.join(", ")
+            engineNo: emp.engineNo,
+            location: emp.Location,
+            state: emp.state,
+            date: emp.date
         };
 
         res.status(200).json({ success: true, message: "Attendance data fetched successfully.", data });
+        console.log(`Employee Data Fectched Successfully : Employee: ${emp.name} (${empCode})`.green)
 
     } catch (error) {
         console.error(error);

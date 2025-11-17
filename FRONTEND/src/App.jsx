@@ -1,30 +1,49 @@
-import style from './App.module.css'
+/**
+ * App Component
+ * 
+ * This is the main entry point for the application. It handles routing, layout, and 
+ * organizes different components like the navigation bar, home content, footbar, and 
+ * the main sections of the app (such as dashboard, attendance management, and complaint registration).
+ * 
+ * Key Features:
+ * 1. It uses React Router to handle client-side routing, allowing users to navigate between different pages.
+ * 2. Includes private routes that require authentication (using the Private component).
+ * 3. Displays various components such as Navbar, MainLeft (Sidebar), MainRight (Sidebar), and Footbar.
+ * 4. It has routes for login, dashboard, complaint registration, attendance management, and admin authentication.
+ * 5. It provides an error page route for unmatched URLs.
+ * 
+ * Layout:
+ * 1. The main layout is split into three sections: `MainLeft`, `Home` (middle section with routes), and `MainRight`.
+ * 2. The `MainLeft` and `MainRight` sections are fixed-width, while the `Home` section takes up most of the remaining space.
+ * 3. The layout is responsive and adjusts based on the screen size.
+ * 
+ * Dependencies:
+ * - React Router (`react-router-dom`) for navigation.
+ * - TailwindCSS for styling and responsiveness.
+ */
+import './App.css';
 import Login from './components/auth/login';
-import Navbar from './components/Bars/navbar'
+import Navbar from './components/Bars/navbar';
 import MainLeft from './components/home/mainLeftKeys';
 import MainRight from './components/home/mainRightKeys';
-import Footbar from './components/Bars/footbar'
+import Footbar from './components/Bars/footbar';
 import Dashboard from './components/home/dashboard';
 import AdminAuth from './components/auth/adminAuth';
-
 
 import CompReg from './components/serviceDept/custromerComp';
 import Attendence from './components/serviceDept/attendence';
 
-
-import Error from './components/other/error';
-import Private from './components/other/privateComp';
+import Error from './components/common/error';
+import Private from './components/utils/privateComp';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
-
 function AppContent() {
-
   return (
     <>
       <Navbar />
-      <div className={style.main}>
-        <MainLeft />
-        <div className={style.home}>
+      <div className="flex w-full sm:h-[81vh] h-[84vh]">
+        <div className="sm:w-[17vw] sm:flex hidden"> <MainLeft /> </div>
+        <div className="sm:w-[66vw] w-full sm:px-2 flex flex-row justify-center bg-gray-400 overflow-y-auto overflow-x-hidden">
           <Routes>
             <Route element={<Private />}>
               <Route path="/" element={<Dashboard />} />
@@ -36,12 +55,11 @@ function AppContent() {
             <Route path="/login" element={<Login />} />
           </Routes>
         </div>
-        <MainRight />
+        <div className="sm:w-[17vw] sm:flex hidden"> <MainRight /> </div>
       </div>
       <Footbar />
-
     </>
-  )
+  );
 }
 
 function App() {
@@ -52,5 +70,4 @@ function App() {
   );
 }
 
-export default App
-
+export default App;

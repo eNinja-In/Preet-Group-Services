@@ -25,10 +25,10 @@ import colors from "colors";
 const RETRY_LIMIT = 5;
 const RETRY_DELAY_MS = 3000;
 
-if (!process.env.DATABASE) {
-  console.error("❌ DATABASE connection string missing in .env".bgRed.white);
-  process.exit(1);
-}
+// if (!process.env.DATABASE) {
+//   console.error("❌ DATABASE connection string missing in .env".bgRed.white);
+//   process.exit(1);
+// }
 
 mongoose.set("strictQuery", true);
 
