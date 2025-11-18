@@ -27,6 +27,7 @@
  */
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LoginUser } from "../helper/authHelper";
 
 export default function Login() {
     const [empCode, setEmpCode] = useState("");
@@ -35,41 +36,27 @@ export default function Login() {
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
-    document.title = "LOGIN PREET GROUPS";
+    // document.title = "LOGIN - PREET GROUPS";
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError("");
-        setLoading(true);
+        if (!empCode || !password) {
+            setError("Please fill in both UserID and Password.");
+            return;
+        }
 
-        try {
-            const response = await fetch(
-                `${import.meta.env.VITE_SERVER_LINK}/api/auth/login-user`,
-                {
-                    method: "POST",
-                    body: JSON.stringify({ empCode, password }),
-                    headers: { "Content-Type": "application/json" },
-                }
-            );
-
-            const result = await response.json();
-            if (response.ok && result.success) {
-                localStorage.setItem("user", JSON.stringify(result));
-                navigate("/"); // Redirect on successful login
-            } else {
-                setError(result.message || "Login failed. Please try again.");
-            }
-        } catch (error) {
-            setError("An unexpected error occurred. Please try again later.");
-        } finally {
-            setLoading(false);
+        const result = await LoginUser(empCode, password, setError, setLoading);
+        if (result) {
+            localStorage.setItem("user", JSON.stringify(result));
+            navigate("/");
         }
     };
 
     return (
-        <div className="w-screen h-screen fixed top-0 left-0 bg-black bg-opacity-80 flex justify-center items-center">
-            <div className="w-1/2 h-1/2 bg-white rounded-2xl border-8 border-green-500 flex flex-col justify-center items-center p-6">
-                <h1 className="text-xl text-center font-semibold mb-4">PREET GROUPS SERVICES</h1>
+        <div className="w-screen h-screen fixed top-0 left-0 bg-black opacity-80 flex justify-center items-center">
+            <div className="min-w-fit min-h-fit bg-white rounded-2xl border-8 border-green-500 flex flex-col justify-center p-6">
+                <h1 className="sm:text-4xl text-4xl text-center font-bold my-10">PREET GROUPS SERVICES</h1>
 
                 {error && <p className="text-red-500 text-sm text-center mb-4">{error}</p>}
 
@@ -99,7 +86,7 @@ export default function Login() {
                     <div className="w-11/12 flex justify-center">
                         <button
                             type="submit"
-                            className="w-2/5 p-3 text-lg bg-green-600 text-white font-bold rounded-lg border-2 border-green-600 hover:bg-white hover:text-green-600 transition"
+                            className="w-2/5 p-3 text-lg bg-green-600 text-white font-bold rounded-lg border-2 border-green-600 hover:bg-white hover:text-green-600 transition cursor-pointer"
                             disabled={loading}
                         >
                             {loading ? "Logging in..." : "Login"}
