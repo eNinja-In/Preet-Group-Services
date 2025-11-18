@@ -36,7 +36,7 @@ export default function MainRight() {
             <Btn title={"Driver Payments"} />
 
             {/* Category Title: REPORTS */}
-            <Btn title={"PDI Reports"} />
+            <Btn click={"/register-combine-Data"} title={"PDI Reports"} />
             <Btn title={"Service Reports"} />
             <Btn title={"Spare Parts Reports"} />
 

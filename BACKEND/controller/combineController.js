@@ -13,7 +13,7 @@ import CombineModel from "../models/combineModel.js";
 export const registerCombineData = async (req, res) => {
     try {
         const { model, engineNo, chassisNo, fipNo, doS, customerName, dealerName, state } = req.body;
-        if (![model, engineNo, doS, state].every(Boolean)) return res.status(400).json({ success: false, message: "model, engineNo, doS and state are required." });
+        if (![model, engineNo, fipNo, doS].every(Boolean)) return res.status(400).json({ success: false, message: "Model, EngineNo, FIP No and Date Of Sale Required." });
 
         const existing = await CombineModel.findOne({ $or: [{ engineNo }, { chassisNo }, { fipNo }] });
         if (existing) {
@@ -23,7 +23,7 @@ export const registerCombineData = async (req, res) => {
 
         const newRecord = await CombineModel.create({ model, engineNo, chassisNo, fipNo, doS, customerName, dealerName, state });
 
-        res.status(201).json({ success: true, message: "Combine data registered successfully.", data: { id: newRecord._id, model: newRecord.model, engineNo: newRecord.engineNo } });
+        res.status(201).json({ success: true, message: "Combine data registered", data: { id: newRecord._id, model: newRecord.model, engineNo: newRecord.engineNo } });
         console.log(`✅ Combine register Successfully : ${newRecord.engineNo}`.green);
 
     } catch (error) {
@@ -79,18 +79,23 @@ export const updateCombineData = async (req, res) => {
 export const getCombineData = async (req, res) => {
     try {
         const { engineNo, chassisNo } = req.body;
-        if (![engineNo, chassisNo].every(Boolean)) return res.status(400).json({ success: false, message: "engineNo or chassisNo is required to fetch data." });
+
+        if (!engineNo) { if (!chassisNo) return res.status(400).json({ success: false, message: "Either engineNo or chassisNo is required to fetch data." }); }
+
+        console.log('Fetching data for:', engineNo, chassisNo);  // Log incoming request
 
         const record = await CombineModel.findOne({ $or: [{ engineNo }, { chassisNo }] });
-        if (!record) return res.status(404).json({ success: false, message: "No combine record found for provided engineNo or chassisNo." });
+        if (!record) { return res.status(404).json({ success: false, message: "No combine record found for provided engineNo or chassisNo." }); }
 
         res.status(200).json({ success: true, message: "Combine data fetched successfully.", data: record });
-        console.log(`✅ Combine Data Fetched Succesfully EngineNo : ${engineNo}, ChasisNo: ${chassisNo}`.green)
+        console.log(`✅ Combine Data Fetched Successfully for EngineNo: ${record.engineNo}, ChassisNo: ${record.chassisNo}`);
     } catch (err) {
         console.error("Error fetching combine data:", err);
         res.status(500).json({ success: false, message: "Server error occurred while fetching combine data." });
     }
 };
+
+
 
 
 // 1. `getCombineDataByDate`: Controller to fetch combine machine records within a given date range.

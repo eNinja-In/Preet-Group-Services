@@ -5,7 +5,7 @@ export default function Footbar() {
             <div className="flex-1"></div>
 
             {/* Footer Right */}
-            <div className="flex-1 text-right text-white font-bold text-lg"> Preet Groups © {new Date().getFullYear()} </div>
+            <div className="flex-1 text-right text-white font-bold text-lg"> Preet Groups © {new Date().getFullYear()} | Dev: <a href="/">eNinja-In</a> </div>
         </div>
     );
 }

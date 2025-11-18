@@ -24,10 +24,10 @@
  * - Custom CSS module (`mainLeftKeys.module.css` for additional styling)
  */
 import Btn from "../common/Btn"
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 export default function MainLeft() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
 
     return (
         <div className="w-full h-full bg-white max-sm:hidden">

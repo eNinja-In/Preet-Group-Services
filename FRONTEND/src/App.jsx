@@ -32,6 +32,7 @@ import AdminAuth from './components/auth/adminAuth';
 
 import CompReg from './components/serviceDept/custromerComp';
 import Attendence from './components/serviceDept/attendence';
+import CombineDataRegistration from './components/pdiDept/Pdimain';
 
 import Error from './components/common/error';
 import Private from './components/utils/privateComp';
@@ -48,6 +49,7 @@ function AppContent() {
             <Route element={<Private />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/register-Complaint" element={<CompReg />} />
+              <Route path="/register-combine-Data" element={<CombineDataRegistration />} />
               <Route path="/attendence-management" element={<Attendence />} />
               <Route path="/admin-auth" element={<AdminAuth />} />
               <Route path="/*" element={<Error />} />

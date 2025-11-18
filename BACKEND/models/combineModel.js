@@ -24,5 +24,14 @@ const CombineScheme = new mongoose.Schema({
     state: { type: String, required: true }
 }, { timestamps: true });
 
+CombineScheme.pre('save', function (next) {
+    if (this.doS) {
+        const date = new Date(this.doS);
+        date.setHours(0, 0, 0, 0);
+        this.doS = date;
+    }
+    next();
+});
+
 const CombineModel = mongoose.model("CombineData", CombineScheme);
 export default CombineModel;

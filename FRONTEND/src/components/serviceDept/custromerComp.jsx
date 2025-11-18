@@ -20,7 +20,7 @@
  */
 
 import { useState } from "react";
-import { fetchData } from "../helper/dataFecth";
+import { fetchData } from "../helper/complaintHelper"
 import PopUp from "../common/PopUp";
 
 export default function CompReg() {
@@ -32,11 +32,11 @@ export default function CompReg() {
     const [Fetch, setFetch] = useState(false);
     const [Register, setRegister] = useState(false);
     const [data, setData] = useState({
-        Chassis: "",
-        Customer: "",
-        Dealer: "",
+        chassisNo: "",
+        customerName: "",
+        dealerName: "",
         Location: "",
-        State: "",
+        state: "",
         Hours: "",
         Problem: "",
         WarrentyChech: true,
@@ -45,7 +45,6 @@ export default function CompReg() {
     const [notification, setNotification] = useState({
         message: "",
         type: "",
-        data: {}
     });
 
     // Function to handle the fetching of engine data based on the engine number
@@ -53,13 +52,7 @@ export default function CompReg() {
         if (EngineNo.trim() !== "") {
             setFetch(true);
             try {
-                await fetchData(EngineNo, setData);  // Call to fetch data from API
-                setNotification({
-                    // message: "Engine data fetched successfully.",
-                    data: data,
-                    type: "success",
-                });
-                setPopUp(true);  // Show success notification pop-up
+                await fetchData(EngineNo, data.chassisNo, setData, setNotification, setPopUp); // Adjusted to use correct engineNo and chassisNo
             } catch (error) {
                 setNotification({
                     message: "Failed to fetch data. Please try again.",
@@ -67,7 +60,7 @@ export default function CompReg() {
                 });
                 setPopUp(true);  // Show error notification pop-up
             } finally {
-                setFetch(false);  // Reset loading state
+                setFetch(false); // Reset loading state after fetch
             }
         } else {
             setNotification({
@@ -77,6 +70,8 @@ export default function CompReg() {
             setPopUp(true);  // Show error notification for invalid engine number
         }
     };
+
+
 
     // Function to handle complaint registration submission
     const handleRegister = async (e) => {
@@ -107,11 +102,11 @@ export default function CompReg() {
                 {/* Display pop-up for notifications */}
                 {popup && (
                     <PopUp
-                        data={notification.data || notification.message}
+                        data={notification.message}
                         type={notification.type}
                         onClose={() => setPopUp(false)}  // Close the pop-up when the user clicks close
                         isOpen={true}
-                        title={notification.type === "error" ? "Error" : "Success"}
+                        title={notification.type}
                     />
                 )}
 
@@ -161,9 +156,9 @@ export default function CompReg() {
                                 <div className="flex-1">
                                     <input
                                         type="text"
-                                        value={data.Chassis}
+                                        value={data.chassisNo}
                                         placeholder="Chassis No."
-                                        onChange={(e) => setData((prev) => ({ ...prev, Chassis: e.target.value }))}
+                                        onChange={(e) => setData((prev) => ({ ...prev, chassisNo: e.target.value }))}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         required
                                     />
@@ -171,9 +166,9 @@ export default function CompReg() {
                                 <div className="flex-1">
                                     <input
                                         type="text"
-                                        value={data.Customer}
+                                        value={data.customerName}
                                         placeholder="Customer Name"
-                                        onChange={(e) => setData((prev) => ({ ...prev, Customer: e.target.value }))}
+                                        onChange={(e) => setData((prev) => ({ ...prev, customerName: e.target.value }))}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         required
                                     />
@@ -185,9 +180,9 @@ export default function CompReg() {
                                 <div className="flex-1">
                                     <input
                                         type="text"
-                                        value={data.Dealer}
+                                        value={data.dealerName}
                                         placeholder="Dealer Name"
-                                        onChange={(e) => setData((prev) => ({ ...prev, Dealer: e.target.value }))}
+                                        onChange={(e) => setData((prev) => ({ ...prev, dealerName: e.target.value }))}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                     />
                                 </div>
@@ -206,9 +201,9 @@ export default function CompReg() {
                                 <div className="flex-1">
                                     <input
                                         type="text"
-                                        value={data.State}
+                                        value={data.state}
                                         placeholder="State"
-                                        onChange={(e) => setData((prev) => ({ ...prev, State: e.target.value }))}
+                                        onChange={(e) => setData((prev) => ({ ...prev, state: e.target.value }))}
                                         className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                                         required
                                     />
