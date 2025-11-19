@@ -32,7 +32,10 @@ import AdminAuth from './components/auth/adminAuth';
 
 import CompReg from './components/serviceDept/custromerComp';
 import Attendence from './components/serviceDept/attendence';
-import CombineDataRegistration from './components/pdiDept/Pdimain';
+
+import Pdi from './components/pdiDept/Pdimain';
+import CombineDataRegistration from './components/pdiDept/pdiDataEntry';
+
 
 import Error from './components/common/error';
 import Private from './components/utils/privateComp';
@@ -49,7 +52,13 @@ function AppContent() {
             <Route element={<Private />}>
               <Route path="/" element={<Dashboard />} />
               <Route path="/register-Complaint" element={<CompReg />} />
-              <Route path="/register-combine-Data" element={<CombineDataRegistration />} />
+
+              {/* Define nested routes for Pdi */}
+              <Route path="/Pdi" element={<Pdi />}>
+                <Route path="Reports" element={<div>Report 1 Content</div>} />
+                <Route path="add-Data" element={<CombineDataRegistration />} />
+              </Route>
+
               <Route path="/attendence-management" element={<Attendence />} />
               <Route path="/admin-auth" element={<AdminAuth />} />
               <Route path="/*" element={<Error />} />

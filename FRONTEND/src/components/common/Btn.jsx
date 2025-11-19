@@ -10,13 +10,13 @@ export default function Btn({ title, click, type }) {
             className="
                 w-[94%]
                 my-[1%] mx-[3%]
-                p-[2%] pl-[8%]
+                p-[1%] pl-[8%]
                 text-left
-                text-[115%] font-bold
-                border-[3px]
+                text-xl font-bold
+                border-2 border-transparent
                 bg-[#0766AD] text-white 
-                cursor-default
-                hover:bg-white hover:text-black hover:cursor-pointer
+                cursor-pointer
+                hover:bg-white hover:text-black  hover:border-black
                 transition-colors duration-200
             "
         >

@@ -28,7 +28,7 @@ export default function PopUp({
 
     return isOpen ? (
         <div className="w-screen h-screen fixed top-0 left-0 bg-[rgba(0,0,0,0.7)] flex justify-center items-center z-50" onClick={handleClickOutside} >
-            <div className={`max-w-fit min-w-xl bg-white min-h-[20%] max-h-[80%] p-6 rounded-xl border-4 border-blue-600 flex flex-col justify-between items-center relative transition-all duration-300 ease-in-out transform ${style.customPopup}`} >
+            <div className={`max-w-fit min-w-xl bg-white min-h-[20%] max-h-[80%] p-10 rounded-xl border-4 border-blue-600 flex flex-col justify-between items-center relative transition-all duration-300 ease-in-out transform ${style.customPopup}`} >
                 {/* Close Button */}
                 <div className="w-10 h-10 absolute top-3 right-3 flex justify-center items-center cursor-pointer">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" onClick={() => onClose && onClose(false)} >
@@ -37,7 +37,7 @@ export default function PopUp({
                 </div>
 
                 {/* Title */}
-                {title && (<h2 className="w-fit text-center text-4xl  font-bold text-gray-800"> {title} </h2>)}
+                {title && (<h2 className="w-fit text-center text-4xl  font-bold text-gray-800"> {title.toUpperCase()} </h2>)}
 
                 {/* Content */}
                 <div className="w-full h-fit text-gray-700 overflow-y-auto flex flex-col justify-start items-center">

@@ -17,7 +17,7 @@ export const registerCombineData = async (req, res) => {
 
         const existing = await CombineModel.findOne({ $or: [{ engineNo }, { chassisNo }, { fipNo }] });
         if (existing) {
-            console.log(`❌ Duplicate Data Entered engineNo: → ${engineNo}, chassisNo: → ${chassisNo}, or fipNo: → ${fipNo} `.bgRed.white)
+            console.log(`❌ Duplicate Data Entered engineNo: → ${existing.engineNo}, chassisNo: → ${existing.chassisNo}, or fipNo: → ${existing.fipNo} `.bgRed.white)
             return res.status(409).json({ success: false, message: `Duplicate entry found for engineNo: → ${engineNo}, chassisNo: → ${chassisNo}, or fipNo: → ${fipNo}` });
         }
 
