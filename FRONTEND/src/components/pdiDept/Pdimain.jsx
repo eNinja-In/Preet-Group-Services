@@ -1,7 +1,7 @@
 import { Link, Route, Routes, Outlet } from "react-router-dom";
 import Btn from "../common/Btn";
 import PdiReports from "./pdiReports";
-import CombineDataRegistration from "./pdiDataEntry";
+import PdiForm from "./Data";
 export default function Pdi() {
     return (
         <div className="w-full h-fit bg-gray-100">
@@ -18,7 +18,7 @@ export default function Pdi() {
                 <div className="w-full h-full">
                     <Routes>
                         <Route path="Reports" element={<PdiReports />} />
-                        <Route path="add-Data" element={<CombineDataRegistration />} />
+                        <Route path="add-Data" element={<PdiForm />} />
                     </Routes>
                 </div>
             </div>

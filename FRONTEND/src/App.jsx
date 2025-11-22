@@ -34,7 +34,7 @@ import CompReg from './components/serviceDept/custromerComp';
 import Attendence from './components/serviceDept/attendence';
 
 import Pdi from './components/pdiDept/Pdimain';
-import CombineDataRegistration from './components/pdiDept/pdiDataEntry';
+import CombineDataRegistration from './components/pdiDept/Data';
 
 
 import Error from './components/common/error';
