@@ -15,7 +15,7 @@ export const registerCombineData = async (req, res) => {
         const { model, engineNo, chassisNo, fipNo, doS, customerName, dealerName, state } = req.body;
         if (![model, engineNo, fipNo, doS].every(Boolean)) return res.status(400).json({ success: false, message: "Model, EngineNo, FIP No and Date Of Sale Required." });
 
-        const existing = await CombineModel.findOne({ $or: [{ engineNo }, { chassisNo }, { fipNo }] });
+        const existing = await CombineModel.findOne({ $or: [{ engineNo }] });
         if (existing) {
             console.log(`❌ Duplicate Data Entered engineNo: → ${existing.engineNo}, chassisNo: → ${existing.chassisNo}, or fipNo: → ${existing.fipNo} `.bgRed.white)
             return res.status(409).json({ success: false, message: `Duplicate entry found for engineNo: → ${engineNo}, chassisNo: → ${chassisNo}, or fipNo: → ${fipNo}` });
@@ -88,7 +88,7 @@ export const getCombineData = async (req, res) => {
         if (!record) { return res.status(404).json({ success: false, message: "No combine record found for provided engineNo or chassisNo." }); }
 
         res.status(200).json({ success: true, message: "Combine data fetched successfully.", data: record });
-        console.log(`✅ Combine Data Fetched Successfully for EngineNo: ${record.engineNo}, ChassisNo: ${record.chassisNo}`);
+        console.log(`✅ Combine Data Fetched Successfully for EngineNo: ${record.engineNo}, ChassisNo: ${record.chassisNo}`.bgGreen);
     } catch (err) {
         console.error("Error fetching combine data:", err);
         res.status(500).json({ success: false, message: "Server error occurred while fetching combine data." });

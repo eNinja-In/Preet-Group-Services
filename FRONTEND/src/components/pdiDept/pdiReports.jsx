@@ -1,4 +1,4 @@
-import { KeyMatrics, MonthlyGraph, QuickAction } from "./pdiDashboard"
+import { KeyMatrics, MonthlyGraph, QuickAction } from "./helper/pdiDashboard"
 export default function PdiReports() {
     return (
         <div className="w-full h-full flex flex-wrap">

@@ -16,12 +16,12 @@ import mongoose from "mongoose";
 const CombineScheme = new mongoose.Schema({
     model: { type: String, required: true },
     engineNo: { type: String, required: true, unique: true },
-    chassisNo: { type: String, unique: true },
-    fipNo: { type: String, unique: true },
+    chassisNo: { type: String, required: true},
+    fipNo: { type: String},
     doS: { type: Date, required: true }, // Date of Sale
     customerName: { type: String, trim: true },
     dealerName: { type: String, trim: true },
-    state: { type: String, required: true }
+    state: { type: String,}
 }, { timestamps: true });
 
 CombineScheme.pre('save', function (next) {
