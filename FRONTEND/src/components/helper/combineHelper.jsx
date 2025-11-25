@@ -1,7 +1,7 @@
 export const registerCombine = async (data) => {
     const { combineModel, engineNo, chassisNo, fipNo, doS, customerName, dealerName, state } = data;
 
-    if (![combineModel, engineNo, doS, fipNo].every(Boolean)) {return { success: false, message: "Model, Engine No, Date of Sale, and State are required." };}
+    if (![combineModel, engineNo, doS, fipNo].every(Boolean)) { return { success: false, message: "Model, Engine No, Date of Sale, and State are required." }; }
 
     try {
         const response = await fetch(`${import.meta.env.VITE_SERVER_LINK}/api/combine/register-combine`, {
@@ -39,5 +39,33 @@ export const getCombineDataByDate = async (startDate, endDate) => {
     } catch (error) {
         console.error("Error while fetching combine data:", error);
         return { success: false, message: "Server error occurred while fetching combine data." };
+    }
+};
+
+
+export const getCombineData = async (engineNo, chassisNo) => {
+    // 1. Basic validation check matching the backend logic
+    if (!engineNo && !chassisNo) return { success: false, message: "Either Engine Number or Chassis Number is required." };
+
+    try {
+        const response = await fetch(`${import.meta.env.VITE_SERVER_LINK}/api/combine/get-combine`, {
+            method: 'POST', // The backend uses req.body, suggesting a POST request
+            body: JSON.stringify({ engineNo, chassisNo, }),
+            headers: { 'Content-Type': 'application/json', },
+        });
+
+        const result = await response.json();
+
+        if (!response.success) {
+            console.error(`Fetch failed with status ${response.status}:`, result.message);
+            return { success: false, message: result.message || `An error occurred with status ${response.status}.`, };
+        }
+
+        // 3. Successful fetch (HTTP 200)
+        // console.log("✅ Data fetched successfully:", result.data);
+        return { success: true, message: result.message, data: result.data, };
+
+    } catch (error) {
+        return { success: false, message: "A network error occurred. Check your connection or server status.", };
     }
 };

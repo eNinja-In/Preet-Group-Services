@@ -27,27 +27,30 @@ async function RegAttend(empCode, data) {
     }
 }
 
+async function FetAttend(empCode) {
+    if (!empCode) {
+        throw new Error("Employee code is required for fetching.");
+    }
 
-async function FetAttend(empCode, setData, setError) {
     try {
         const response = await fetch(
-            `${import.meta.env.VITE_SERVER_LINK}/api/attendence/fetch-attendence`, // Correct endpoint
+            `${import.meta.env.VITE_SERVER_LINK}/api/attendence/fetch-attendence`,
             {
                 method: "POST",
-                body: JSON.stringify({ empCode }), // Send empCode in request body
+                body: JSON.stringify({ empCode }),
                 headers: { "Content-Type": "application/json" },
             }
         );
-        // console.log("1")
-        const result = await response.json(); // Parse the JSON response
 
-        if (response.ok && result.success) {
-            // Function to get the last item from a comma-separated string
-            const getLastItem = (str) => {
-                const items = str.split(',').map(item => item.trim()); // Split and remove any extra spaces Return the last item
+        const result = await response.json();
+        const getLastItem = (str) => {
+            if (typeof str === 'string' && str.trim() !== '') {
+                const items = str.split(',').map(item => item.trim());
                 return items[items.length - 1];
-            };
-
+            }
+            return '';
+        };
+        if (response.ok && result.success) {
             // Map the fetched data and extract the last item from each field
             const extractedData = {
                 name: result.data.name,
@@ -56,22 +59,22 @@ async function FetAttend(empCode, setData, setError) {
                 location: getLastItem(result.data.location),
                 state: getLastItem(result.data.state),
                 date: getLastItem(result.data.date),
+                // Note: The original code didn't handle `problem` on fetch, assuming it's for submission only.
+                problem: '',
             };
 
-            // Set the fetched data in frontend state (using React's setState)
-            setData(extractedData);
-            return true
-
+            return extractedData;
         } else {
-            // If response is not ok, show the error message
-            setError(result.message || "Failed to fetch data. Please try again.");
-            return false
+            // Throw a specific error message returned from the backend
+            const message = result.message || "Failed to fetch employee data. Please verify the code.";
+            throw new Error(message);
         }
     } catch (error) {
-        // Handle network or other errors
-        console.log("Error fetching data:", error);
-        setError("An error occurred while fetching data. Please try again.");
-        return false
+        // Re-throw the error with a more generic message for network/parsing issues
+        if (error.message.includes("Failed to fetch")) {
+            throw new Error("Network error: Could not connect to the server.");
+        }
+        throw error;
     }
 }
 

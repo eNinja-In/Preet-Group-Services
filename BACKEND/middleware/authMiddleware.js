@@ -35,8 +35,8 @@ export const requireSignIn = async (req, res, next) => {
 
     const decoded = JWT.verify(token, process.env.JSON_SECRET_KEY);
     req.user = decoded; // Attach user payload to request
-
-    next();
+    return res.status(401).json({ success: true, message: "Authorized Access", });
+    // next();
   } catch (error) {
     if (error.name === "TokenExpiredError") { return res.status(401).json({ success: false, message: "Session expired. Please log in again.", }); }
 

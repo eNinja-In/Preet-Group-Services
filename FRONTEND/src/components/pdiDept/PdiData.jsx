@@ -64,12 +64,6 @@ function dataReducer(state, action) {
 }
 
 // --- Date Calculation Utility ---
-/**
- * Calculates start and end dates based on a selected period.
- * Uses date-fns for reliable date logic.
- * @param {string} periodType - 'last-week', 'last-month', 'this-month'
- * @returns {{startDate: string, endDate: string}} Formatted date strings
- */
 const calculateDateRange = (periodType) => {
     const now = new Date();
     let startDate;
@@ -88,7 +82,6 @@ const calculateDateRange = (periodType) => {
             return { startDate: '', endDate: '' };
     }
 
-    // Format dates to 'YYYY-MM-DD' for input[type="date"]
     return {
         startDate: format(startDate, 'yyyy-MM-dd'),
         endDate: format(now, 'yyyy-MM-dd'),
@@ -106,12 +99,10 @@ const CombineDataPage = () => {
         dispatch({ type: actionTypes.SET_FILTER_TYPE, payload: selectedPeriod });
 
         if (selectedPeriod === "custom") {
-            // Clear dates when switching back to custom, letting the user set them
             dispatch({ type: actionTypes.SET_DATES, payload: { startDate: '', endDate: '' } });
         } else {
             const { startDate: newStart, endDate: newEnd } = calculateDateRange(selectedPeriod);
             dispatch({ type: actionTypes.SET_DATES, payload: { startDate: newStart, endDate: newEnd } });
-            // Since dates are set, we will rely on the useEffect below to trigger fetchData
         }
     };
 
@@ -124,13 +115,11 @@ const CombineDataPage = () => {
                 endDate: dateType === 'end' ? value : endDate,
             },
         });
-        // Ensure filter type is set to custom when the user manually changes a date
         dispatch({ type: actionTypes.SET_FILTER_TYPE, payload: "custom" });
     };
 
     // Fetch combine data from the backend based on selected dates
     const fetchData = useCallback(async () => {
-        // Simple validation check
         if (!startDate || !endDate || isAfter(new Date(startDate), new Date(endDate))) {
             dispatch({ type: actionTypes.FETCH_ERROR, payload: "Please select a valid date range (Start date must be before End date)." });
             return;
@@ -138,23 +127,31 @@ const CombineDataPage = () => {
 
         dispatch({ type: actionTypes.FETCH_START });
 
-        const result = await getCombineDataByDate(startDate, endDate);
+        try {
+            const result = await getCombineDataByDate(startDate, endDate);
 
-        if (result.success) {
-            dispatch({ type: actionTypes.FETCH_SUCCESS, payload: result.data });
-        } else {
-            dispatch({ type: actionTypes.FETCH_ERROR, payload: result.message || "Failed to fetch data." });
+            if (result.success) {
+                dispatch({ type: actionTypes.FETCH_SUCCESS, payload: result.data });
+            } else {
+                dispatch({ type: actionTypes.FETCH_ERROR, payload: result.message || "Failed to fetch data." });
+            }
+        } catch (error) {
+             console.error("Fetch error:", error);
+             dispatch({ type: actionTypes.FETCH_ERROR, payload: "An unexpected error occurred during data fetch." });
         }
-    }, [startDate, endDate]); // Dependencies for useCallback
+    }, [startDate, endDate]); 
 
     // Trigger fetch on date/filter change
     useEffect(() => {
-        // Only fetch if we have a valid date range selected (custom or period)
         if (startDate && endDate) {
             fetchData();
         }
     }, [startDate, endDate, fetchData]);
 
+    // Function to initiate the browser print dialog
+    const handlePrint = () => {
+        window.print();
+    };
 
     // Helper function for display logic
     const getCustomerDisplay = (item) => {
@@ -165,11 +162,14 @@ const CombineDataPage = () => {
 
     return (
         <div className="container mx-auto p-6 bg-gray-50 min-h-screen">
-            <h1 className="text-3xl font-extrabold text-gray-800 mb-6 border-b pb-2">📊 Combined Data Report</h1>
-            <div className="bg-white p-6 rounded-xl shadow-lg mb-6">
+            {/* Hiding the main title/header on print */}
+            <h1 className="text-3xl font-extrabold text-gray-800 mb-6 border-b pb-2 print:hidden">📊 Combined Data Report</h1>
+            
+            {/* Hiding the entire filter section on print */}
+            <div className="bg-white p-6 rounded-xl shadow-lg mb-6 print:hidden">
                 <div className="flex flex-col md:flex-row gap-4 items-center mb-6">
                     {/* Date Period Dropdown */}
-                    <div className="flex flex-shrink-0">
+                    <div className="flex">
                         <label className="block text-sm font-medium text-gray-700 mb-1">Select Period:</label>
                         <select
                             onChange={handlePeriodChange}
@@ -206,8 +206,7 @@ const CombineDataPage = () => {
                             </div>
                         </div>
                     )}
-                     <div className="flex-shrink-0">
-                        {/* Button to fetch data (hidden if using period filter and dates are already set) */}
+                     <div className="">
                         <button
                             onClick={fetchData}
                             disabled={loading || !startDate || !endDate}
@@ -239,46 +238,68 @@ const CombineDataPage = () => {
                 )}
             </div>
 
-            ---
+            <hr className="mb-8 print:hidden" />
 
-            {/* Displaying Data in Table */}
+            {/* Displaying Data in Table - Ensure this part is NOT hidden */}
             {combineData.length > 0 && (
-                <div className="mt-8 bg-white p-6 rounded-xl shadow-lg overflow-x-auto">
-                    <h2 className="text-xl font-bold mb-4 text-gray-700">Results ({combineData.length} Records)</h2>
-                    <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg">
-                        <thead className="bg-gray-50">
-                            <tr>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Model</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Engine No</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Chassis No</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">FIP No</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Delivery Date</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r">Customer/Dealer</th>
-                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">State</th>
-                            </tr>
-                        </thead>
-                        <tbody className="bg-white divide-y divide-gray-200">
-                            {combineData.map((item, index) => (
-                                <tr key={item._id || index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50 hover:bg-gray-100'}>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">{item.model}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">{item.engineNo}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">{item.chassisNo && item.chassisNo !== "NaN"? item.chassisNo: ""}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">{item.fipNo}</td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">
-                                        {item.doS ? format(new Date(item.doS), 'dd/MM/yyyy') : 'N/A'}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">
-                                        {getCustomerDisplay(item)}
-                                    </td>
-                                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        {item.state && item.state !== "NaN" ? item.state : ""}
-                                    </td>
+                // Use default or specific print styles for the table container if necessary
+                <div className="mt-8 bg-white p-6 rounded-xl shadow-lg print:p-0 print:m-0 print:shadow-none">
+                    
+                    {/* Header with Print Button. Hiding the button, but keeping the title (and improving the title for print) */}
+                    <div className="flex justify-between items-center mb-4">
+                         <h2 className="text-xl font-bold text-gray-700 print:text-lg print:text-black">
+                            {/* Display a clear title for the printout */}
+                            Results ({combineData.length} Records) for {startDate} to {endDate}
+                         </h2>
+                         <button
+                            onClick={handlePrint}
+                            className="flex items-center space-x-2 px-4 py-2 bg-green-600 text-white rounded-md font-semibold hover:bg-green-700 transition duration-150 shadow-md print:hidden"
+                        >
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fillRule="evenodd" d="M5 4v3h4V4H5zm4 7H5v4h4v-4zM11 4h4v3h-4V4zm4 7h-4v4h4v-4zM5 13a1 1 0 011-1h8a1 1 0 011 1v2a1 1 0 01-1 1H6a1 1 0 01-1-1v-2z" clipRule="evenodd" >
+                                <path d="M10 2a2 2 0 00-2 2v1h4V4a2 2 0 00-2-2zM4 6a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2V8a2 2 0 00-2-2H4z" />
+                            </path></svg>
+                            <span>Print Table</span>
+                        </button>
+                    </div>
+                    
+                    <div className="overflow-x-auto">
+                        {/* Table styles are usually fine for printing, but we remove excessive wrapping elements. */}
+                        <table className="min-w-full divide-y divide-gray-200 border border-gray-200 rounded-lg print:border-collapse">
+                            <thead className="bg-gray-50 print:bg-gray-100">
+                                <tr>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r print:text-black">Model</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r print:text-black">Engine No</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r print:text-black">Chassis No</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r print:text-black">FIP No</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r print:text-black">Delivery Date</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider border-r print:text-black">Customer/Dealer</th>
+                                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider print:text-black">State</th>
                                 </tr>
-                            ))}
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody className="bg-white divide-y divide-gray-200">
+                                {combineData.map((item, index) => (
+                                    <tr key={item._id || index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50 hover:bg-gray-100 print:bg-white'}>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 border-r">{item.model}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">{item.engineNo}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">{item.chassisNo && item.chassisNo !== "NaN"? item.chassisNo: ""}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">{item.fipNo}</td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">
+                                            {item.doS ? format(new Date(item.doS), 'dd/MM/yyyy') : 'N/A'}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 border-r">
+                                            {getCustomerDisplay(item)}
+                                        </td>
+                                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                            {item.state && item.state !== "NaN" ? item.state : ""}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tbody>
+                        </table>
+                    </div>
                     {combineData.length === 0 && !loading && (
-                        <div className="text-center p-6 text-gray-500">No data found for the selected period.</div>
+                        <div className="text-center p-6 text-gray-500 print:hidden">No data found for the selected period.</div>
                     )}
                 </div>
             )}

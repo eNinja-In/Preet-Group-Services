@@ -1,61 +1,181 @@
-/**
- * PopUp Component
- *
- * A highly customizable and reusable popup/modal component that can handle various content types,
- * including text, objects, images, and custom components.
- * The component allows the user to define custom content, title, close behavior, and more.
- *
- * Props:
- * - data (optional): The content to be displayed inside the popup. Can be a string, object, or other types.
- * - title (optional): The title of the popup.
- * - isOpen (optional): Whether the popup is open or not. Useful for controlling visibility from the parent.
- * - onClose (optional): A function that is called when the popup is closed.
- * - style (optional): Custom CSS styles to override the default ones.
- * - closeOnClickOutside (optional): Whether the popup should close when clicked outside.
- * - actions (optional): Custom actions (buttons or other components) to be displayed at the bottom of the popup.
- */
+import React, { useEffect, useCallback, useMemo } from 'react';
+import { createPortal } from 'react-dom';
 
-export default function PopUp({
+// --- Content Renderer Utility ---
+
+/**
+ * Renders the data content based on its type.
+ * @param {object} props
+ * @param {any} props.data - The content prop.
+ * @returns {React.ReactNode} A React component tree for the content.
+ */
+const ModalContent = ({ data }) => {
+    if (data === undefined || data === null) {
+        return null;
+    }
+
+    // Handle React Components (JSX, Custom Elements)
+    if (React.isValidElement(data) || typeof data === 'function') {
+        return <>{data}</>;
+    }
+
+    // Handle plain text/numbers
+    if (typeof data === 'string' || typeof data === 'number') {
+        return (
+            <p className="text-lg text-gray-700 p-2 text-center whitespace-pre-wrap">
+                {data}
+            </p>
+        );
+    }
+
+    // Handle Objects (rendered as key-value list)
+    if (typeof data === 'object' && !Array.isArray(data)) {
+        const entries = Object.entries(data);
+        if (entries.length === 0) return null;
+
+        return (
+            <div className="w-full divide-y divide-gray-200">
+                {entries.map(([key, value], i) => (
+                    <div
+                        key={i}
+                        className="flex flex-wrap items-start py-3 px-1"
+                    >
+                        <div className="w-1/3 text-base font-semibold text-blue-600 pr-2">
+                            {key.toUpperCase()}
+                        </div>
+                        <div className="w-2/3 text-left text-base text-gray-800 wrap-break-word">
+                            {String(value)}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        );
+    }
+    
+    // Fallback for other array types or unexpected data
+    return <>{data}</>;
+};
+
+// --- Main Modal Component ---
+
+export default function Modal({
     data,
     title,
-    isOpen = false,
+    isOpen,
     onClose,
-    style = {},
+    className = '',
     closeOnClickOutside = true,
-    actions = null
+    actions = null,
+    isContentScrollable = true,
 }) {
-    const handleClickOutside = (e) => { if (e.target === e.currentTarget && closeOnClickOutside) onClose && onClose(false); };
+    
+    const handleClose = useCallback(() => {
+        // Calls the parent's function to set isOpen to false
+        onClose(false); 
+    }, [onClose]);
 
-    return isOpen ? (
-        <div className="w-screen h-screen fixed top-0 left-0 bg-[rgba(0,0,0,0.7)] flex justify-center items-center z-50" onClick={handleClickOutside} >
-            <div className={`max-w-fit min-w-xl bg-white min-h-[20%] max-h-[80%] p-10 rounded-xl border-4 border-blue-600 flex flex-col justify-between items-center relative transition-all duration-300 ease-in-out transform ${style.customPopup}`} >
-                {/* Close Button */}
-                <div className="w-10 h-10 absolute top-3 right-3 flex justify-center items-center cursor-pointer">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="40" height="40" onClick={() => onClose && onClose(false)} >
-                        <path d="M12 10.293l-4.707-4.707-1.414 1.414L10.293 12l-4.707 4.707 1.414 1.414L12 13.707l4.707 4.707 1.414-1.414L13.707 12l4.707-4.707-1.414-1.414z" />
-                    </svg>
+    // Handler for clicking the background overlay
+    const handleClickOutside = useCallback((e) => {
+        // The type for 'e' is removed here!
+        if (e.target === e.currentTarget && closeOnClickOutside) {
+            handleClose();
+        }
+    }, [closeOnClickOutside, handleClose]);
+
+    // Effect to handle the ESC key press and body scroll locking
+    useEffect(() => {
+        if (!isOpen) {
+            document.body.style.overflow = ''; // Re-enable scroll
+            return;
+        }
+
+        document.body.style.overflow = 'hidden'; // Lock scroll when open
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                e.stopPropagation();
+                handleClose();
+            }
+        };
+
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.removeEventListener('keydown', handleKeyDown);
+            document.body.style.overflow = ''; // Clean up on unmount/close
+        };
+    }, [isOpen, handleClose]);
+    
+    if (!isOpen) {
+        return null;
+    }
+
+    const contentClasses = isContentScrollable 
+        ? 'overflow-y-auto max-h-[calc(80vh-120px)] p-4' // Calculated height for scrollable content
+        : 'p-4';
+
+    const modalMarkup = (
+        // 1. Modal Overlay (Screen Dimmer)
+        <div 
+            className="fixed inset-0 bg-black/70 flex justify-center items-center z-50 transition-opacity duration-300"
+            onClick={handleClickOutside}
+            aria-modal="true" 
+            role="dialog"
+            aria-labelledby={title ? 'modal-title' : undefined}
+        >
+            {/* 2. Modal Content Container */}
+            <div
+                className={`
+                    max-w-3xl w-full mx-4 sm:mx-6 md:w-auto 
+                    bg-white rounded-lg shadow-2xl border border-gray-200
+                    flex flex-col transform transition-transform duration-300 scale-100
+                    ${className}
+                `}
+                // Prevents closing the modal when clicking on the content itself
+                onClick={(e) => e.stopPropagation()}
+            >
+                {/* 3. Modal Header (Title & Close Button) */}
+                <div className="flex justify-between items-center p-5 border-b border-gray-200 relative">
+                    {title && (
+                        <h2 id="modal-title" className="text-3xl font-extrabold text-gray-900 tracking-tight">
+                            {title}
+                        </h2>
+                    )}
+                    <button
+                        type="button"
+                        onClick={handleClose}
+                        className="ml-auto p-1.5 text-gray-400 hover:text-gray-900 transition-colors rounded-full hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        aria-label="Close modal"
+                    >
+                        {/* Close Icon */}
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
                 </div>
 
-                {/* Title */}
-                {title && (<h2 className="w-fit text-center text-4xl  font-bold text-gray-800"> {title.toUpperCase()} </h2>)}
-
-                {/* Content */}
-                <div className="w-full h-fit text-gray-700 overflow-y-auto flex flex-col justify-start items-center">
-                    {typeof data === "object" && !Array.isArray(data) ? (
-                        Object.entries(data).map(([key, value], i) => (
-                            <div key={i} className="w-full my-2 p-2 border-b border-gray-300 text-black flex flex-wrap justify-start items-center" >
-                                <div className="w-[35%] px-2 text-lg font-bold text-blue-600"> {key.toUpperCase()} </div>
-                                <div className="w-[60%] mx-5 text-left text-base">{value}</div>
-                            </div>
-                        ))
-                    ) : typeof data === "string" ? (<strong className="w-full text-center text-2xl text-red-600 font-bold"> {data} </strong>
-                    ) : typeof data === "number" ? (<div className="text-4xl font-extrabold text-gray-800">{data}</div>
-                    ) : (data)}
+                {/* 4. Modal Body (Content) */}
+                <div className={`${contentClasses}`}>
+                    <ModalContent data={data} />
                 </div>
 
-                {/* Custom Actions (Buttons or other components) */}
-                {actions && (<div className="w-full mt-4 flex justify-center items-center">{actions}</div>)}
+                {/* 5. Modal Footer (Actions) */}
+                {actions && (
+                    <div className="flex justify-end items-center p-5 border-t border-gray-200 space-x-3">
+                        {actions}
+                    </div>
+                )}
             </div>
         </div>
-    ) : null;
+    );
+    
+    // Render the modal via a Portal to the document body
+    return createPortal(modalMarkup, document.body);
 }
+
+// Optional: Add default props
+Modal.defaultProps = {
+    isOpen: false,
+    closeOnClickOutside: true,
+    isContentScrollable: true,
+};

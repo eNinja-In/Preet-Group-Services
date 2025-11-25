@@ -24,7 +24,6 @@ export const fetchData = async (engineNo, chassisNo, setData, setNotification, s
 
         const data = await response.json();
 
-        console.log(data); // Log response to verify if it's correct
         
         if (data.success) {
             setData(data.data); // Update data state
@@ -40,29 +39,6 @@ export const fetchData = async (engineNo, chassisNo, setData, setNotification, s
         setPopUp(true); // Show error notification
     }
 };
-
-
-
-
-// export const fetchData = async (EngineNo, setData) => {
-//     try {
-//         const fetchedData = {
-//             Chassis: `${EngineNo}`,
-//             Customer: `${EngineNo}`,
-//             Dealer: `${EngineNo}`,
-//             Location: `${EngineNo}`,
-//             State: `${EngineNo}`,
-//             Hours: 100,  // Example
-//             Problem: `${EngineNo}`,
-//             WarrentyChech: true,
-//             Warrenty: `OUT OF WARRENTY`,
-//         };
-//         setData(fetchedData);
-//     } catch (error) {alert.error("Error fetching data:", error);}
-// };
-
-
-
 
 export const regComplaint = async (EngineNo, data) => {
     const chassis = data.Chassis;

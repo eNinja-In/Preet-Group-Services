@@ -18,17 +18,15 @@ export const regAttndence = async (req, res) => {
         if (!emp) return res.status(404).json({ success: false, message: 'Employee not found.' });
 
         // [engineNo, Location, state, date, problem].forEach((data, index) => emp[Object.keys(emp)[index + 1]].push(data));
-        const fieldsToUpdate = ['engineNo', 'contact', 'Location', 'state', 'date', 'problem' ];
+        const fieldsToUpdate = ['engineNo', 'contact', 'Location', 'state', 'date', 'problem'];
         fieldsToUpdate.forEach((field, index) => {
-            if (!Array.isArray(emp[field])) {
-                emp[field] = [];  // Initialize as an empty array if it's not already an array
-            }
-            emp[field].push(req.body[Object.keys(req.body)[index + 1]]);  // Push the value to the corresponding array
+            if (!Array.isArray(emp[field])) emp[field] = [];
+            emp[field].push(req.body[Object.keys(req.body)[index + 1]]);
         });
 
         await emp.save();
         res.status(200).json({ success: true, message: 'Attendance registered.', employee: { id: emp._id, name: emp.name } });
-        console.log(`Employee Attendence Registerd Successfully: EmpCode: ${empCode} ON: ${date} `.green)
+        console.log(`Employee Attendence Registerd Successfully: EmpCode: ${empCode} ON: ${date} `.bgGreen)
     } catch (error) {
         console.error(error);
         res.status(500).json({ success: false, message: 'Server error.' });
@@ -45,6 +43,7 @@ export const regAttndence = async (req, res) => {
 // 7. Saving Data: Saves the new employee attendance document to the database.
 // 8. Response: Returns a 201 “created successfully” message with the employee's ID and name.
 // 9. Error Handling: Catches unexpected errors and returns a 500 server error response.
+
 export const newAttndence = async (req, res) => {
     try {
         const { empCode, name, engineNo, contact, Location, state, date, problem } = req.body;

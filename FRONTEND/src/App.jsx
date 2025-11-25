@@ -29,6 +29,7 @@ import MainRight from './components/home/mainRightKeys';
 import Footbar from './components/Bars/footbar';
 import Dashboard from './components/home/dashboard';
 import AdminAuth from './components/auth/adminAuth';
+import { checkAuth } from './components/utils/checkAuth';
 
 import CompReg from './components/serviceDept/custromerComp';
 import Attendence from './components/serviceDept/attendence';
@@ -42,34 +43,57 @@ import BulkRegister from './uploadData';
 import Error from './components/common/error';
 import Private from './components/utils/privateComp';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 
 function AppContent() {
+  const [isauth, setIsAuth] = useState(true); // State to store authentication status
+
+  // const checkUserAuth = async () => {
+  //   await checkAuth(setIsAuth);  // Pass setIsAuth to checkAuth
+  // };
+
+  // useEffect(() => {
+  //   checkUserAuth();
+
+  //   const intervalId = setInterval(() => {
+  //     checkUserAuth(); // Check auth every 1 hour
+  //   }, 3600000); // 1 hour interval
+
+  //   return () => clearInterval(intervalId);
+  // }, []);
+
+  // if (isauth === null) { setIsAuth(false)}
+
   return (
     <>
       <Navbar />
       <div className="flex w-full sm:h-[81vh] h-[84vh]">
         <div className="sm:w-[17vw] sm:flex hidden"> <MainLeft /> </div>
         <div className="sm:w-[66vw] w-full sm:px-2 flex flex-row justify-center bg-gray-400 overflow-y-auto overflow-x-hidden">
-          <Routes>
-            <Route element={<Private />}>
-              <Route path="/" element={<Dashboard />} />
-              <Route path="/register-Complaint" element={<CompReg />} />
-
-              {/* Define nested routes for Pdi */}
-              <Route path="/Pdi" element={<Pdi />}>
-                <Route path="Reports" element={<div>Report 1 Content</div>} />
-                <Route path="add-Data" element={<PdiForm />} />
-                <Route path="combines-Data" element={<CombineDataPage />} />
+          {isauth ? (
+            <Routes>
+              <Route element={<Private />}>
+                <Route path="/" element={<Dashboard />} />
+                <Route path="/register-Complaint" element={<CompReg />} />
+                {/* Define nested routes for Pdi */}
+                <Route path="/Pdi" element={<Pdi />}>
+                  <Route path="Reports" element={<div>Report 1 Content</div>} />
+                  <Route path="add-Data" element={<PdiForm />} />
+                  <Route path="combines-Data" element={<CombineDataPage />} />
+                </Route>
+                <Route path="/BulkRegister" element={<BulkRegister />} />
+                <Route path="/attendence-management" element={<Attendence />} />
+                <Route path="/admin-auth" element={<AdminAuth />} />
+                <Route path="/*" element={<Error />} />
               </Route>
-
-              <Route path="/BulkRegister" element={<BulkRegister />} />
-
-              <Route path="/attendence-management" element={<Attendence />} />
-              <Route path="/admin-auth" element={<AdminAuth />} />
+              <Route path="/login" element={<Login />} />
+            </Routes>
+          ) : (
+            <Routes>
+              <Route path="/login" element={<Login />} />
               <Route path="/*" element={<Error />} />
-            </Route>
-            <Route path="/login" element={<Login />} />
-          </Routes>
+            </Routes>
+          )}
         </div>
         <div className="sm:w-[17vw] sm:flex hidden"> <MainRight /> </div>
       </div>
@@ -77,7 +101,6 @@ function AppContent() {
     </>
   );
 }
-
 
 function App() {
   return (
