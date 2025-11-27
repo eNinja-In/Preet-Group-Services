@@ -27,15 +27,15 @@ export const fetchData = async (engineNo, chassisNo, setData, setNotification, s
         
         if (data.success) {
             setData(data.data); // Update data state
-            setNotification({ message: data.data, type: 'Combine Data Fetched Successfully' });
+            setNotification({ message: data.data, title: 'Combine Data Fetched Successfully' });
         } else {
-            setNotification({ message: data.message || 'Error fetching data.', type: 'error' });
+            setNotification({ message: data.message || 'Error fetching data.', title: 'error' });
         }
 
         setPopUp(true);
     } catch (error) {
         console.error('Error fetching data:', error);
-        setNotification({ message: 'Error fetching data. Please try again.', type: 'error' });
+        setNotification({ message: 'Error fetching data. Please try again.', title: 'error' });
         setPopUp(true); // Show error notification
     }
 };

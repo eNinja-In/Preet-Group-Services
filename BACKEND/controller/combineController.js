@@ -46,14 +46,14 @@ export const registerCombineData = async (req, res) => {
 export const updateCombineData = async (req, res) => {
     try {
         const { model, engineNo, chassisNo, fipNo, doS, customerName, dealerName, state } = req.body;
-        if (![model, engineNo, chassisNo, fipNo, doS, customerName, dealerName, state].every(Boolean)) return res.status(400).json({ success: false, message: "All fields are required." });
+        if (![model, engineNo, chassisNo].every(Boolean)) return res.status(400).json({ success: false, message: "All fields are required." });
 
-        const record = await CombineModel.findOne({ $or: [{ engineNo }, { chassisNo }] });
+        const record = await CombineModel.findOne({ $or: [{ engineNo }] });
         if (!record) return res.status(404).json({ success: false, message: "No combine record found for provided engineNo or chassisNo." });
 
         const duplicate = await CombineModel.findOne({
             _id: { $ne: record._id },
-            $or: [{ engineNo }, { chassisNo }, { fipNo }]
+            $or: [{ engineNo }, { chassisNo }, { fipNo }, {state}]
         });
         if (duplicate) return res.status(409).json({ success: false, message: "Duplicate entry found for engineNo, chassisNo, or fipNo." });
 
@@ -84,7 +84,7 @@ export const getCombineData = async (req, res) => {
 
         console.log('Fetching data for:', engineNo, chassisNo);  // Log incoming request
 
-        const record = await CombineModel.findOne({ $or: [{ engineNo }, { chassisNo }] });
+        const record = await CombineModel.findOne({ $or: [{ engineNo }] });
         if (!record) { return res.status(404).json({ success: false, message: "No combine record found for provided engineNo or chassisNo." }); }
 
         res.status(200).json({ success: true, message: "Combine data fetched successfully.", data: record });

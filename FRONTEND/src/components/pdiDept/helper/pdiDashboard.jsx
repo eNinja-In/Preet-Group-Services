@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
-import 'react-circular-progressbar/dist/styles.css'; // Import the styles for circular progress bar
+import 'react-circular-progressbar/dist/styles.css';
 import { getCombineDataByDate } from '../../helper/combineHelper';
 
 export function KeyMatrics() {
@@ -15,12 +15,11 @@ export function KeyMatrics() {
             // ---- YESTERDAY CALC ----
             const today = new Date();
             const yesterday = new Date(today);
-            yesterday.setDate(today.getDate() - 1);
+            yesterday.setDate(today.getDate() - 2);
 
             const yStart = yesterday.toISOString().split('T')[0];
             const yEnd = today.toISOString().split('T')[0];
-
-            const yData = await getCombineDataByDate(yStart, yStart);
+            const yData = await getCombineDataByDate(yStart, yEnd);
             if (yData.success) setYesterdayData(yData.len);
 
             // ---- CURRENT MONTH ----

@@ -12,7 +12,7 @@ export default function Btn({ title, click, type }) {
             onClick={() => navigate(click)}
             type={type}
             className={`
-                w-[94%] my-[1%] mx-[3%] p-[1%] pl-[8%] text-left text-xl font-bold
+                min-w-[94%] max-w-fit my-[1%] mx-[3%] p-[1%] pl-[8%] text-left text-xl font-bold flex 
                 border-2
                 ${isActive ? "border-black bg-white text-black" : "border-transparent bg-[#0766AD] text-white"} 
                 cursor-pointer

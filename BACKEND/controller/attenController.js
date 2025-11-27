@@ -84,7 +84,8 @@ export const fetchAttendence = async (req, res) => {
             engineNo: emp.engineNo,
             location: emp.Location,
             state: emp.state,
-            date: emp.date
+            date: emp.date,
+            problem: emp.problem
         };
 
         res.status(200).json({ success: true, message: "Attendance data fetched successfully.", data });

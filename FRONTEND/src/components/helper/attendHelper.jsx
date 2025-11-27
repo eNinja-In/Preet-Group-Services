@@ -1,31 +1,28 @@
 // Function to register attendance (append string data to the array)
 async function RegAttend(empCode, data) {
-    const { date, location, state, contact, engineNo } = data;
+    const { date, location, state, contact, engineNo, problem } = data;
 
     try {
-        // Send a POST request to register the attendance
-        const response = await fetch(
-            `${import.meta.env.VITE_SERVER_LINK}/api/attendence/register`,
-            {
-                method: "POST",
-                body: JSON.stringify({ empCode, engineNo, contact, Location: location, state: state, date, }),
-                headers: { "Content-Type": "application/json", },
-            }
-        );
+        const response = await fetch(`${import.meta.env.VITE_SERVER_LINK}/api/attendence/register`, {
+            method: "POST",
+            body: JSON.stringify({ empCode, engineNo, contact, Location: location, state, date, problem }),
+            headers: { "Content-Type": "application/json" },
+        });
 
         const result = await response.json();
 
-        // Check if the response is successful
-        if (response.ok && result.success) { console.log("Attendance registered successfully", result.message); }
-        else { console.error("Error: ", result.message || "Failed to register attendance."); }
-
-    }
-    // Handle any errors that occur during the fetch request
-    catch (error) {
-        console.error("Error while registering attendance: ", error);
-        // alert("Error while registering attendance. Please try again.");
+        if (response.ok && result.success) {
+            console.log("Attendance registered successfully:", result.message);
+            return result; // Return result on success
+        } else {
+            throw new Error(result.message || "Failed to register attendance.");
+        }
+    } catch (error) {
+        console.error("Error while registering attendance:", error);
+        throw new Error(error.message || "An error occurred during registration.");
     }
 }
+
 
 async function FetAttend(empCode) {
     if (!empCode) {
@@ -43,14 +40,18 @@ async function FetAttend(empCode) {
         );
 
         const result = await response.json();
-        const getLastItem = (str) => {
-            if (typeof str === 'string' && str.trim() !== '') {
-                const items = str.split(',').map(item => item.trim());
-                return items[items.length - 1];
+        const getLastItem = (value) => {
+            if (Array.isArray(value)) {
+                return value[value.length - 1];  // Return the last item if it's an array
+            } else if (typeof value === 'string' && value.trim() !== '') {
+                const items = value.split(',').map(item => item.trim());
+                return items[items.length - 1];  // For strings, return the last item after splitting
             }
-            return '';
+            return '';  // Return empty if the value is neither a string nor an array
         };
-        if (response.ok && result.success) {
+
+
+        if (response.ok || result.success) {
             // Map the fetched data and extract the last item from each field
             const extractedData = {
                 name: result.data.name,
@@ -62,7 +63,6 @@ async function FetAttend(empCode) {
                 // Note: The original code didn't handle `problem` on fetch, assuming it's for submission only.
                 problem: '',
             };
-
             return extractedData;
         } else {
             // Throw a specific error message returned from the backend
@@ -103,7 +103,6 @@ async function createNewAttendence(empCode, data) {
 
         // Check if the response is successful
         if (response.ok && result.success) {
-            console.log("Attendance registered successfully", result.message);
             // Additional logic on success (e.g., update UI, redirect, etc.)
         } else {
             console.error("Error: ", result.message || "Failed to register new attendance.");

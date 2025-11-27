@@ -27,7 +27,10 @@ import Navbar from './components/Bars/navbar';
 import MainLeft from './components/home/mainLeftKeys';
 import MainRight from './components/home/mainRightKeys';
 import Footbar from './components/Bars/footbar';
+
 import Dashboard from './components/home/dashboard';
+import RecentActivity from './components/home/Main/RecentActivity';
+
 import AdminAuth from './components/auth/adminAuth';
 import { checkAuth } from './components/utils/checkAuth';
 
@@ -38,7 +41,7 @@ import Pdi from './components/pdiDept/Pdimain';
 import PdiForm from './components/pdiDept/PdiDataForm';
 import CombineDataPage from './components/pdiDept/PdiData';
 
-import BulkRegister from './uploadData';
+import {BulkRegister, BulkUpdate} from './uploadData';
 
 import Error from './components/common/error';
 import Private from './components/utils/privateComp';
@@ -69,11 +72,15 @@ function AppContent() {
       <Navbar />
       <div className="flex w-full sm:h-[81vh] h-[84vh]">
         <div className="sm:w-[17vw] sm:flex hidden"> <MainLeft /> </div>
-        <div className="sm:w-[66vw] w-full sm:px-2 flex flex-row justify-center bg-gray-400 overflow-y-auto overflow-x-hidden">
+        <div className="sm:w-[66vw] w-full sm:px-1 flex flex-row justify-center bg-gray-400 overflow-y-auto overflow-x-hidden">
           {isauth ? (
             <Routes>
               <Route element={<Private />}>
-                <Route path="/" element={<Dashboard />} />
+                <Route path="/" element={<Dashboard />} >
+                  <Route path="recent" element={<RecentActivity />} />
+                  <Route path="add-Data" element={<PdiForm />} />
+                  <Route path="combines-Data" element={<CombineDataPage />} />
+                </ Route>
                 <Route path="/register-Complaint" element={<CompReg />} />
                 {/* Define nested routes for Pdi */}
                 <Route path="/Pdi" element={<Pdi />}>
@@ -82,6 +89,7 @@ function AppContent() {
                   <Route path="combines-Data" element={<CombineDataPage />} />
                 </Route>
                 <Route path="/BulkRegister" element={<BulkRegister />} />
+                <Route path="/BulkUpdate" element={<BulkUpdate />} />
                 <Route path="/attendence-management" element={<Attendence />} />
                 <Route path="/admin-auth" element={<AdminAuth />} />
                 <Route path="/*" element={<Error />} />

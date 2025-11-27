@@ -18,7 +18,7 @@ const attendSchema = new mongoose.Schema({
     empCode: { type: String, required: true, unique: true, trim: true },
     name: { type: String, required: true, trim: true },
     engineNo: { type: [String], required: true },
-    contact: { type: String, required: true },
+    contact: { type: String },
     Location: { type: [String], required: true, trim: true },
     state: { type: [String], required: true },
     date: { type: [String], required: true },
