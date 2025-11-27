@@ -42,7 +42,7 @@ import "colors";
 import router from "./router/authRouter.js";
 import attenRouter from "./router/attenRouter.js";
 import combineRouter from "./router/combineRouter.js";
-
+import complaintRouter from "./router/complaintRouter.js"
 dotenv.config();
 
 const __filename = fileURLToPath(import.meta.url);
@@ -98,6 +98,7 @@ app.use("/api/auth", authLimiter);
 app.use("/api/auth", router);
 app.use("/api/attendence", attenRouter);
 app.use("/api/combine", combineRouter);
+app.use("/api/service", complaintRouter);
 
 // -----------------------------------------------------------------------------
 // Socket.IO Configuration

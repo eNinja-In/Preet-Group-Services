@@ -40,10 +40,12 @@ export const fetchData = async (engineNo, chassisNo, setData, setNotification, s
     }
 };
 
+
+
 export const regComplaint = async (EngineNo, data) => {
     const chassis = data.Chassis;
     const customer = data.Customer;
-    const Dealer = data.Dealer;
+    // const Dealer = data.Dealer;
     const Location = data.Location;
     const State = data.State;
     const Hours = data.Hours;
@@ -54,12 +56,12 @@ export const regComplaint = async (EngineNo, data) => {
             `${meta.env.VITE_SERVER_LINK}/api/service/reg-complaint`,
             {
                 method: "POST",
-                body: JSON.stringify({ EngineNo, chassis, customer, Dealer, Location, State, Hours, Problem }),
+                body: JSON.stringify({ engineNo: EngineNo, chassisNo: chassis, customerName: customer, contact, location: Location, state: State, workHr: Hours, problem: Problem }),
                 headers: { "Content-Type": "application/json" },
             }
         )
         const result = await response.json();
-        if (response.ok && result.success) { }
+        if (response.ok && result.success) { return result}
 
     } catch (error) {
         alert.error("ERROR", error)

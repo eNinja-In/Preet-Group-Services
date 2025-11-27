@@ -14,6 +14,7 @@ const initialComplaintData = {
     chassisNo: "",
     customerName: "",
     dealerName: "",
+    contact: "",
     Location: "", // State key should match input 'name'
     state: "",
     Hours: "",
@@ -62,6 +63,7 @@ export default function CompReg() {
             Location: apiData.Location || "",
             state: apiData.state || "",
             Hours: apiData.Hours || "",
+            contact: apiData.contact || "",
         }));
 
         // --- 2. Determine Warranty Status based on Date of Sale (doS) ---
@@ -157,16 +159,15 @@ export default function CompReg() {
         setIsRegistering(true);
 
         try {
-            // Simulate API call success
-            // In a real app, you would call registerComplaint(engineNo, complaintData) here.
-            await new Promise(resolve => setTimeout(resolve, 1500));
-
-            setNotification({
-                message: `Complaint for Engine No. ${engineNo} registered successfully!`,
-                type: "success",
-                title: "Success 🎉",
-            });
-            setPopUp(true);
+            const result = await regComplaint(engineNo, complaintData)
+            if (result.success) {
+                setNotification({
+                    message: `Complaint for Engine No. ${engineNo} registered successfully!`,
+                    type: "success",
+                    title: "Success 🎉",
+                });
+                setPopUp(true);
+            }
 
             // Clear form after successful registration
             setEngineNo("");
@@ -294,6 +295,19 @@ export default function CompReg() {
                                             name="dealerName"
                                             value={complaintData.dealerName}
                                             placeholder="Dealer Name"
+                                            onChange={handleChange}
+                                            className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${!isFormActive ? 'bg-gray-100 cursor-not-allowed' : ''}`}
+                                            required
+                                            disabled={!isFormActive}
+                                        />
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label className="text-sm font-medium text-gray-600 mb-1">Contact</label>
+                                        <input
+                                            type="number"
+                                            name="contact"
+                                            value={complaintData.contact}
+                                            placeholder="Contact: +91 00000 00000"
                                             onChange={handleChange}
                                             className={`px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 ${!isFormActive ? 'bg-gray-100 cursor-not-allowed' : ''}`}
                                             required

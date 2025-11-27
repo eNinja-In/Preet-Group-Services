@@ -42,7 +42,7 @@ export default function MainRight() {
             <Btn title={"Spare Parts Reports"} />
 
             {/* Category Title: USER SETTINGS */}
-            <Btn title={"User Settings"} />
+            <Btn click={"/admin/user-settings"} title={"User Settings"} />
         </div>
     );
 }

@@ -14,7 +14,7 @@
 
 import mongoose from "mongoose";
 
-const cs = new mongoose.Schema({
+const ComplaintData = new mongoose.Schema({
     engineNo: { type: String, required: true, unique: true },
     chassisNo: { type: String, unique: true, trim: true },
     customerName: { type: String, trim: true },
@@ -25,4 +25,4 @@ const cs = new mongoose.Schema({
     problem: { type: String, required: true }
 }, { timestamps: true });
 
-export default mongoose.model("ComplaintData", cs);
+export default mongoose.model("ComplaintData", ComplaintData);

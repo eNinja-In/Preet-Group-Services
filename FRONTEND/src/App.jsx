@@ -95,6 +95,7 @@ function AppContent() {
                 {/* Define nested routes for ADMIN */}
                 <Route element={<IsAdminAuth />} >
                   <Route path="/admin/control" element={<div>Hello world</div>} />
+                  <Route path="/admin/user-settings" element={<div>Hello Admin</div>} />
                 </Route>
                 <Route path="/admin-auth" element={<AdminAuth />} />
                 <Route path="/*" element={<Error />} />

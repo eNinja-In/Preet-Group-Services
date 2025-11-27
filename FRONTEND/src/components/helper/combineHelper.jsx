@@ -21,6 +21,8 @@ export const registerCombine = async (data) => {
     }
 };
 
+
+
 export const updateCombine = async (data) => {
     const { combineModel, engineNo, chassisNo, fipNo, doS, customerName, dealerName, state } = data;
 
@@ -85,8 +87,6 @@ export const getCombineData = async (engineNo, chassisNo) => {
             return { success: false, message: result.message || `An error occurred with status ${response.status}.`, };
         }
 
-        // 3. Successful fetch (HTTP 200)
-        // console.log("✅ Data fetched successfully:", result.data);
         return { success: true, message: result.message, data: result.data, };
 
     } catch (error) {
