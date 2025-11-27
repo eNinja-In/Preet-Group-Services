@@ -53,7 +53,10 @@ export default function AdminAuth() {
         }
 
         const result = await loginAdminRequest(auth, adminCode, passKey, setError, setLoading);
-        if (result) { navigate("/"); }
+        if (result) {
+            localStorage.setItem("admin", JSON.stringify(result));
+            navigate("/admin/control");
+        }
     };
 
     return (

@@ -41,10 +41,10 @@ import Pdi from './components/pdiDept/Pdimain';
 import PdiForm from './components/pdiDept/PdiDataForm';
 import CombineDataPage from './components/pdiDept/PdiData';
 
-import {BulkRegister, BulkUpdate} from './uploadData';
+import { BulkRegister, BulkUpdate } from './uploadData';
 
 import Error from './components/common/error';
-import Private from './components/utils/privateComp';
+import { Private, IsAdminAuth } from './components/utils/privateComp';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
@@ -76,6 +76,7 @@ function AppContent() {
           {isauth ? (
             <Routes>
               <Route element={<Private />}>
+                {/* Define nested routes for DASHBOARD */}
                 <Route path="/" element={<Dashboard />} >
                   <Route path="recent" element={<RecentActivity />} />
                   <Route path="add-Data" element={<PdiForm />} />
@@ -91,6 +92,10 @@ function AppContent() {
                 <Route path="/BulkRegister" element={<BulkRegister />} />
                 <Route path="/BulkUpdate" element={<BulkUpdate />} />
                 <Route path="/attendence-management" element={<Attendence />} />
+                {/* Define nested routes for ADMIN */}
+                <Route element={<IsAdminAuth />} >
+                  <Route path="/admin/control" element={<div>Hello world</div>} />
+                </Route>
                 <Route path="/admin-auth" element={<AdminAuth />} />
                 <Route path="/*" element={<Error />} />
               </Route>

@@ -31,8 +31,12 @@ export default function Navbar() {
         localStorage.clear();
         navigate("/login");
     };
-
+    const adminLogout = () => {
+        localStorage.removeItem("admin");
+        navigate("/")
+    }
     const auth = JSON.parse(localStorage.getItem("user"));
+    const admin = JSON.parse(localStorage.getItem("admin"));
 
     return (
         <>
@@ -71,8 +75,9 @@ export default function Navbar() {
 
                 {/* Right Navigation */}
                 <div className="flex items-center space-x-4">
-                    <>
-                        <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 cursor-pointer" onClick={() => navigate("/admin-auth")} > Admin </button>
+                    <>{!admin ? <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-800 cursor-pointer" onClick={() => navigate("/admin-auth")} >Admin</button>
+                        : <button className="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-red-800 cursor-pointer" onClick={adminLogout} >Admin Logout</button>}
+                        
                         <button className="bg-white text-black px-4 py-2 rounded-lg hover:bg-red-800 cursor-pointer" onClick={logout} >Logout</button>
                     </>
                 </div>
