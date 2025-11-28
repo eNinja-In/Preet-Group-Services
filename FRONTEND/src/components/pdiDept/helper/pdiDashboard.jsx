@@ -15,7 +15,8 @@ export function KeyMatrics() {
             // ---- YESTERDAY CALC ----
             const today = new Date();
             const yesterday = new Date(today);
-            yesterday.setDate(today.getDate() - 1);
+            yesterday.setDate(today.getDate() - 2);
+            console.log(yesterday)
 
             const yStart = yesterday.toISOString().split('T')[0];
             const yEnd = today.toISOString().split('T')[0];
