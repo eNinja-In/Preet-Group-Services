@@ -32,7 +32,7 @@ import Dashboard from './components/Dashboard/dashboard';
 import RecentActivity from './components/Dashboard/Main/RecentActivity';
 
 import AdminAuth from './components/auth/adminAuth';
-// import { checkAuth } from './components/utils/checkAuth';
+import { checkAuth } from './components/utils/checkAuth';
 
 import CompReg from './components/Service/Complaint/custromerComp';
 import Attendence from './components/Service/Attendence/attendence';
@@ -42,14 +42,16 @@ import PdiForm from './components/Pdi/PdiDataForm';
 import CombineDataPage from './components/Pdi/PdiData';
 
 import SparePartsMain from './components/SpareParts/SparePartsMain';
+import DispatchMain from './components/SpareParts/Dispatch/MainDispatch';
 import AddDispatch from './components/SpareParts/Dispatch/AddDispatch';
+import ReturnMain from './components/SpareParts/Return/ReturnMain';
 
 import { BulkRegister, BulkUpdate } from './uploadData';
 
 import Error from './components/common/error';
 import { Private, IsAdminAuth } from './components/utils/privateComp';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 function AppContent() {
   const [isauth, setIsAuth] = useState(true); // State to store authentication status
@@ -103,9 +105,11 @@ function AppContent() {
                 </Route>
 
                 <Route path="/spare-parts" element={<SparePartsMain />} >
+                  <Route path="" element={<DispatchMain />} />
                   <Route path="add-dispatch" element={<AddDispatch />} />
-                  <Route path="return" element={""}/>
-                  <Route path="payment" element={""}/>
+
+                  <Route path="return" element={<ReturnMain />} />
+                  <Route path="payment" element={""} />
                 </Route>
                 <Route path="/admin-auth" element={<AdminAuth />} />
                 <Route path="/*" element={<Error />} />

@@ -2,6 +2,7 @@ import { Link, Route, Routes } from "react-router-dom";
 import Btn from "../common/Btn";
 import AddDispatch from "./Dispatch/AddDispatch";
 import DispatchMain from "./Dispatch/MainDispatch";
+import ReturnMain from "./Return/ReturnMain";
 export default function SparePartsMain() {
     return (
         <div className="w-full min-h-screen bg-gray-50 ">
@@ -15,7 +16,9 @@ export default function SparePartsMain() {
                 <Routes>
                     <Route path="" element={<DispatchMain />} />
                     <Route path="add-dispatch" element={<AddDispatch />} />
-                    <Route path="return" element={<div>Return Data</div>} />
+
+                    <Route path="return" element={<ReturnMain />} />
+                    
                     <Route path="payment" element={<div>Payment Datails</div>} />
                 </Routes>
             </div>

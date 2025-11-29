@@ -1,7 +1,7 @@
 import React, { useReducer, useCallback } from "react";
 import PopUp from "../common/PopUp";
 import { registerCombine } from "../helper/combineHelper";
-import PrintDetails from "../common/PdiSheetPrint";
+import PrintDetails from "../Print/PdiSheetPrint";
 
 // --- STATE MANAGEMENT (useReducer) ---
 
