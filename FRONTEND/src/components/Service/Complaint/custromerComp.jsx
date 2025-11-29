@@ -7,8 +7,8 @@
 
 import { useState } from "react";
 // Assuming 'fetchData' and 'registerComplaint' are available in the helper file
-import { fetchData, regComplaint } from "../helper/complaintHelper"
-import PopUp from "../common/PopUp";
+import { fetchData, regComplaint } from "../../helper/complaintHelper"
+import PopUp from "../../common/PopUp";
 
 const initialComplaintData = {
     chassisNo: "",

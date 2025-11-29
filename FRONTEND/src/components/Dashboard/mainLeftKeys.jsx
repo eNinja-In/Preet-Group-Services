@@ -24,10 +24,7 @@
  * - Custom CSS module (`mainLeftKeys.module.css` for additional styling)
  */
 import Btn from "../common/Btn"
-// import { useNavigate } from "react-router-dom";
-
 export default function MainLeft() {
-    // const navigate = useNavigate();
 
     return (
         <div className="w-full h-full bg-white max-sm:hidden">
@@ -36,8 +33,8 @@ export default function MainLeft() {
             <Btn title={"Customer Feedback"} />
             <Btn title={"Work Progress Tracking"} />
             <Btn title={"Service Dispatch"} />
-            <Btn title={"Spare Parts Management"} />
-            <Btn title={"Parts Return and Billing"} />
+            <Btn click={"/spare-parts"} title={"Spare Parts Management"} />
+            {/* <Btn title={"Parts Return and Billing"} /> */}
         </div>
     );
 }

@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
-import PopUp from "../common/PopUp";
-import { FetAttend, RegAttend } from "../helper/attendHelper";
+import PopUp from "../../common/PopUp";
+import { FetAttend, RegAttend } from "../../helper/attendHelper";
 
 // Default state for form data
 const initialDataState = {

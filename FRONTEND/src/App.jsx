@@ -24,22 +24,25 @@
 import './App.css';
 import Login from './components/auth/login';
 import Navbar from './components/Bars/navbar';
-import MainLeft from './components/home/mainLeftKeys';
-import MainRight from './components/home/mainRightKeys';
+import MainLeft from './components/Dashboard/mainLeftKeys';
+import MainRight from './components/Dashboard/mainRightKeys';
 import Footbar from './components/Bars/footbar';
 
-import Dashboard from './components/home/dashboard';
-import RecentActivity from './components/home/Main/RecentActivity';
+import Dashboard from './components/Dashboard/dashboard';
+import RecentActivity from './components/Dashboard/Main/RecentActivity';
 
 import AdminAuth from './components/auth/adminAuth';
-import { checkAuth } from './components/utils/checkAuth';
+// import { checkAuth } from './components/utils/checkAuth';
 
-import CompReg from './components/serviceDept/custromerComp';
-import Attendence from './components/serviceDept/attendence';
+import CompReg from './components/Service/Complaint/custromerComp';
+import Attendence from './components/Service/Attendence/attendence';
 
-import Pdi from './components/pdiDept/Pdimain';
-import PdiForm from './components/pdiDept/PdiDataForm';
-import CombineDataPage from './components/pdiDept/PdiData';
+import PdiDashboard from './components/Pdi/Pdimain';
+import PdiForm from './components/Pdi/PdiDataForm';
+import CombineDataPage from './components/Pdi/PdiData';
+
+import SparePartsMain from './components/SpareParts/SparePartsMain';
+import AddDispatch from './components/SpareParts/Dispatch/AddDispatch';
 
 import { BulkRegister, BulkUpdate } from './uploadData';
 
@@ -76,26 +79,33 @@ function AppContent() {
           {isauth ? (
             <Routes>
               <Route element={<Private />}>
-                {/* Define nested routes for DASHBOARD */}
+
                 <Route path="/" element={<Dashboard />} >
                   <Route path="recent" element={<RecentActivity />} />
                   <Route path="add-Data" element={<PdiForm />} />
                   <Route path="combines-Data" element={<CombineDataPage />} />
                 </ Route>
                 <Route path="/register-Complaint" element={<CompReg />} />
-                {/* Define nested routes for Pdi */}
-                <Route path="/Pdi" element={<Pdi />}>
+
+                <Route path="/Pdi" element={<PdiDashboard />}>
                   <Route path="Reports" element={<div>Report 1 Content</div>} />
                   <Route path="add-Data" element={<PdiForm />} />
                   <Route path="combines-Data" element={<CombineDataPage />} />
                 </Route>
+
                 <Route path="/BulkRegister" element={<BulkRegister />} />
                 <Route path="/BulkUpdate" element={<BulkUpdate />} />
                 <Route path="/attendence-management" element={<Attendence />} />
-                {/* Define nested routes for ADMIN */}
+
                 <Route element={<IsAdminAuth />} >
                   <Route path="/admin/control" element={<div>Hello world</div>} />
                   <Route path="/admin/user-settings" element={<div>Hello Admin</div>} />
+                </Route>
+
+                <Route path="/spare-parts" element={<SparePartsMain />} >
+                  <Route path="add-dispatch" element={<AddDispatch />} />
+                  <Route path="return" element={""}/>
+                  <Route path="payment" element={""}/>
                 </Route>
                 <Route path="/admin-auth" element={<AdminAuth />} />
                 <Route path="/*" element={<Error />} />
