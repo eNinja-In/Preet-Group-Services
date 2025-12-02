@@ -159,24 +159,30 @@ export default function CompReg() {
         setIsRegistering(true);
 
         try {
-            const result = await regComplaint(engineNo, complaintData)
-            if (result.success) {
+            const result = await regComplaint(engineNo, complaintData);
+            if (result) {
                 setNotification({
                     message: `Complaint for Engine No. ${engineNo} registered successfully!`,
                     type: "success",
                     title: "Success 🎉",
                 });
                 setPopUp(true);
+
+                // Clear form after successful registration
+                setEngineNo("");
+                setComplaintData(initialComplaintData);
+                setWarrantyStatus({
+                    check: true,
+                    message: "Awaiting Engine Number...",
+                });
+
             }
-
-            // Clear form after successful registration
-            setEngineNo("");
-            setComplaintData(initialComplaintData);
-            setWarrantyStatus({
-                check: true,
-                message: "Awaiting Engine Number...",
-            });
-
+            else{                setNotification({
+                    message: `ERROr`,
+                    type: "",
+                    title: "ERROR",
+                });
+                setPopUp(true);}
         } catch (error) {
             // Error handling for registration failure
             setNotification({

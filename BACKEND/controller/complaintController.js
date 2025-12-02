@@ -7,8 +7,8 @@ export const registerComplaint = async (req, res) => {
         const newComplaint = new ComplaintData({ engineNo, chassisNo, customerName, contact, location, state, workHr, problem });
         await newComplaint.save();
 
-        res.status(201).json({ success: true, message: 'Complaint registered successfully.', complaint: { id: newComplaint._id, engineNo: newComplaint.engineNo } });
         console.log(`Complaint Registered Successfully: EngineNo: ${engineNo} - Problem: ${problem}`.bgGreen);
+        res.status(201).json({ success: true, message: 'Complaint registered successfully.', complaint: { id: newComplaint._id, engineNo: newComplaint.engineNo } });
     } catch (error) {
         console.error(error);
         if (error.code === 11000) return res.status(400).json({ success: false, message: 'Engine No or Chassis No already exists.' });

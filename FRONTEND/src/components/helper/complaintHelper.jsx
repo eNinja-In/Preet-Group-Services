@@ -24,7 +24,7 @@ export const fetchData = async (engineNo, chassisNo, setData, setNotification, s
 
         const data = await response.json();
 
-        
+
         if (data.success) {
             setData(data.data); // Update data state
             setNotification({ message: data.data, title: 'Combine Data Fetched Successfully' });
@@ -61,9 +61,9 @@ export const regComplaint = async (EngineNo, data) => {
             }
         )
         const result = await response.json();
-        if (response.ok && result.success) { return result}
+        if (response.ok && result.success) { return result }
 
     } catch (error) {
-        alert.error("ERROR", error)
+        console.error('Error Registering data:', error);
     }
 }

@@ -349,10 +349,10 @@ const DispatchReports = () => {
                                                     {Object.entries(detailsByDate).map(([date, materials]) => (
                                                         <div key={date} className="mb-4 p-3 bg-blue-100 rounded-lg">
                                                             <h5 className="font-bold text-blue-700 mb-1">Dispatch Date: {date}</h5>
-                                                            <ul className="list-disc list-inside space-y-1 text-sm">
+                                                            <ul className="list-disc list-inside space-y-1 text-sm flex flex-wrap gap-2 justify-center">
                                                                 {materials.map((material, matIndex) => (
-                                                                    <li key={matIndex} className="text-gray-800">
-                                                                        **{material.name}**: {material.quantity} units @ ₹{material.price.toFixed(2)} each (Total: ₹{material.total.toFixed(2)})
+                                                                    <li key={matIndex} className="text-gray-800 list-none p-2 w-9/20 border">
+                                                                        {material.name}:-&gt; {material.quantity} units :-&gt; ₹{material.price.toFixed(1)} / item  ==&gt; (Total: ₹{material.total.toFixed(1)})
                                                                     </li>
                                                                 ))}
                                                             </ul>
