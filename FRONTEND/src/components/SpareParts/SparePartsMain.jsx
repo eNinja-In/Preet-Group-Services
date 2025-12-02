@@ -3,6 +3,7 @@ import Btn from "../common/Btn";
 import AddDispatch from "./Dispatch/AddDispatch";
 import DispatchMain from "./Dispatch/MainDispatch";
 import ReturnMain from "./Return/ReturnMain";
+import DispatchReports from "./Dispatch/DispatchReports";
 export default function SparePartsMain() {
     return (
         <div className="w-full min-h-screen bg-gray-50 ">
@@ -16,6 +17,8 @@ export default function SparePartsMain() {
                 <Routes>
                     <Route path="" element={<DispatchMain />} />
                     <Route path="add-dispatch" element={<AddDispatch />} />
+                    <Route path="dispatch-reports" element={<DispatchReports />} />
+                    
 
                     <Route path="return" element={<ReturnMain />} />
                     

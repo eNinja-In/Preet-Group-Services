@@ -43,8 +43,10 @@ import CombineDataPage from './components/Pdi/PdiData';
 
 import SparePartsMain from './components/SpareParts/SparePartsMain';
 import DispatchMain from './components/SpareParts/Dispatch/MainDispatch';
+import DispatchReports from './components/SpareParts/Dispatch/DispatchReports';
 import AddDispatch from './components/SpareParts/Dispatch/AddDispatch';
 import ReturnMain from './components/SpareParts/Return/ReturnMain';
+
 
 import { BulkRegister, BulkUpdate } from './uploadData';
 
@@ -107,6 +109,7 @@ function AppContent() {
                 <Route path="/spare-parts" element={<SparePartsMain />} >
                   <Route path="" element={<DispatchMain />} />
                   <Route path="add-dispatch" element={<AddDispatch />} />
+                  <Route path="dispatch-reports" element={<DispatchReports />} />
 
                   <Route path="return" element={<ReturnMain />} />
                   <Route path="payment" element={""} />
