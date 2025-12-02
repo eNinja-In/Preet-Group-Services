@@ -22,6 +22,7 @@ export const registerDispatch = async (req, res) => {
                 { new: true }
             );
 
+            console.log(`Dispatch record updated with new materials ${empCode, empName}`.bgGreen)
             return res.status(200).json({ msg: 'Dispatch record updated with new materials', dispatchRecord, });
         }
 
@@ -29,38 +30,38 @@ export const registerDispatch = async (req, res) => {
         const newDispatchRecord = new DispatchRecord({ empCode, empName, contact, allDispatches, });
 
         await newDispatchRecord.save();
-
+        console.log(`Dispatch record created successfully ${empCode, empName}`)
         return res.status(201).json({ msg: 'Dispatch record created successfully', dispatchRecord: newDispatchRecord, });
 
     } catch (error) {
-        console.error('Error during dispatch registration/update:', error.message);
+        console.error(`Error during dispatch registration/update :${error.message}`.bgRed);
         return res.status(500).json({ msg: 'Server error during record operation', error: error.message, });
     }
 };
 
 
-export const updateDispatchByEmpCode = async (req, res) => {
-    try {
-        const { empCode } = req.params;
-        const { empName, contact, allDispatches } = req.body;
+// export const updateDispatchByEmpCode = async (req, res) => {
+//     try {
+//         const { empCode } = req.params;
+//         const { empName, contact, allDispatches } = req.body;
 
-        const existingRecord = await DispatchRecord.findOne({ empCode });
-        if (!existingRecord) { return res.status(404).json({ msg: 'Invalid empCode. Please check the empCode or try a similar one.', }); }
+//         const existingRecord = await DispatchRecord.findOne({ empCode });
+//         if (!existingRecord) { return res.status(404).json({ msg: 'Invalid empCode. Please check the empCode or try a similar one.', }); }
 
-        const dispatchRecord = await DispatchRecord.findOneAndUpdate(
-            { empCode },
-            { empName, contact, allDispatches },
-            { new: true }
-        );
+//         const dispatchRecord = await DispatchRecord.findOneAndUpdate(
+//             { empCode },
+//             { empName, contact, allDispatches },
+//             { new: true }
+//         );
 
-        if (!dispatchRecord) { return res.status(404).json({ msg: 'No dispatch record found for the provided empCode.' }); }
+//         if (!dispatchRecord) { return res.status(404).json({ msg: 'No dispatch record found for the provided empCode.' }); }
 
-        return res.status(200).json({ msg: 'Dispatch record successfully updated.', dispatchRecord });
-    } catch (error) {
-        console.error('Error updating dispatch record:', error.message);
-        return res.status(500).json({ msg: 'An error occurred while updating the dispatch record. Please try again later.', error: error.message });
-    }
-};
+//         return res.status(200).json({ msg: 'Dispatch record successfully updated.', dispatchRecord });
+//     } catch (error) {
+//         console.error('Error updating dispatch record:', error.message);
+//         return res.status(500).json({ msg: 'An error occurred while updating the dispatch record. Please try again later.', error: error.message });
+//     }
+// };
 
 
 export const getDispatchByEmpCode = async (req, res) => {
@@ -70,9 +71,10 @@ export const getDispatchByEmpCode = async (req, res) => {
         const dispatchRecord = await DispatchRecord.findOne({ empCode });
         if (!dispatchRecord) { return res.status(404).json({ msg: 'No dispatch record found for the provided empCode.' }); }
 
+        console.error(` dispatch record fetched Successfully: ${empCode} `.bgGreen);
         return res.status(200).json({ msg: 'Dispatch record retrieved successfully.', dispatchRecord });
     } catch (error) {
-        console.error('Error fetching dispatch record:', error.message);
+        console.error(`Error fetching dispatch record: ${error.message}`.bgRed);
         return res.status(500).json({ msg: 'An error occurred while fetching the dispatch record. Please try again later.', error: error.message });
     }
 };
@@ -93,7 +95,7 @@ export const getDispatchByDate = async (req, res) => {
 
         return res.status(200).json({ msg: 'Dispatch records retrieved successfully', dispatchRecords, });
     } catch (error) {
-        console.error('Error fetching dispatch records by date:', error.message);
+        console.error(`Error fetching dispatch record: ${error.message}`.bgRed);
         return res.status(500).json({ msg: 'An error occurred while fetching the dispatch records' });
     }
 };
@@ -118,7 +120,7 @@ export const getAllDispatchRecords = async (req, res) => {
 
         return res.status(200).json({ totalRecords, page: pageNum, limit: limitNum, totalPages: Math.ceil(totalRecords / limitNum), dispatchRecords, });
     } catch (error) {
-        console.error('Error fetching dispatch records:', error.message);
+        console.error(`Error fetching dispatch record: ${error.message}`.bgRed);
         return res.status(500).json({ msg: 'An error occurred while fetching the dispatch records.', error: error.message, });
     }
 };
@@ -141,7 +143,7 @@ export const deleteMaterialFromDispatch = async (req, res) => {
 
         return res.status(200).json({ msg: 'Material successfully removed from dispatch record.', dispatchRecord, });
     } catch (error) {
-        console.error('Error removing material from dispatch record:', error.message);
+        console.error(`Error fetching dispatch record: ${error.message}`.bgRed);
         return res.status(500).json({ msg: 'An error occurred while removing the material.', error: error.message, });
     }
 };

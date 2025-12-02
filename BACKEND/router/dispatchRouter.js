@@ -1,7 +1,7 @@
 import express from "express";
 import {
     registerDispatch,
-    updateDispatchByEmpCode,
+    // updateDispatchByEmpCode,
     getDispatchByEmpCode,
     getDispatchByDate,
     getAllDispatchRecords,
@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.post('/register-dispatch', registerDispatch);
 
-router.put('/update-dispatch/:empCode', updateDispatchByEmpCode);
+// router.put('/update-dispatch/:empCode', updateDispatchByEmpCode);
 
 router.get('/dispatch/:empCode', getDispatchByEmpCode);
 
