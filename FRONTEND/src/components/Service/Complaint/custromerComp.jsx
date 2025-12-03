@@ -177,12 +177,14 @@ export default function CompReg() {
                 });
 
             }
-            else{                setNotification({
+            else {
+                setNotification({
                     message: `ERROr`,
                     type: "",
                     title: "ERROR",
                 });
-                setPopUp(true);}
+                setPopUp(true);
+            }
         } catch (error) {
             // Error handling for registration failure
             setNotification({
@@ -386,7 +388,6 @@ export default function CompReg() {
                                 </div>
                             </form>
                         </section>
-
                     </div>
                 </div>
             </div>
